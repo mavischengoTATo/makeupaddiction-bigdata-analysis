@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>External resource: www.Reddit.com, Google Index</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="add_external_data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="add_external_data_files/libs/quarto-html/quarto.js"></script>
+<script src="add_external_data_files/libs/quarto-html/popper.min.js"></script>
+<script src="add_external_data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="add_external_data_files/libs/quarto-html/anchor.min.js"></script>
+<link href="add_external_data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="add_external_data_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="add_external_data_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="add_external_data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="add_external_data_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">External resource: www.Reddit.com, <a href="https://trends.google.com/trends/?geo=US&amp;hl=en-US">Google Index</a></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="new-varaible-posting_karma" class="level2">
+<h2 class="anchored" data-anchor-id="new-varaible-posting_karma">new varaible : posting_karma</h2>
+<p>“Karma is a reflection of how much a Redditor’s contributions mean to the community. Making posts that communities find valuable is the way to gain Karma.” –Reddit.com</p>
+<div class="cell" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get posting karma of the creator from Python Reddit API Wrapper</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> udf_get_karma(author_str):</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Reddit API Credential</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    client_id <span class="op">=</span> <span class="st">'UViHJJ217cLodAY9AraMWg'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    client_secret <span class="op">=</span> <span class="st">'dvpLKVfv7ItyQhHkYPPOK6o_ssI63w'</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    user_agent <span class="op">=</span> <span class="st">'android:com.example.myredditapp:v1.2.3 (by u/sf_suzyfeng)'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Reddit Username</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    username <span class="op">=</span> <span class="st">'sf_suzyfeng'</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Initialize a Reddit instance</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    reddit <span class="op">=</span> praw.Reddit(client_id<span class="op">=</span>client_id,client_secret<span class="op">=</span>client_secret,user_agent<span class="op">=</span>user_agent)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        redditor<span class="op">=</span> reddit.redditor(author_str)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        link_karma<span class="op">=</span> redditor.link_karma</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if the account was deleted, set Karma to 0 </span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        link_karma<span class="op">=</span> <span class="dv">0</span>   </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> link_karma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Distribution of posting_karma:</strong></p>
+<div class="cell" data-tags="[]" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span> pd.read_csv(<span class="st">'../../data/csv/top10creator.csv'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert 'created_year' to categorical</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'created_year'</span>] <span class="op">=</span> df[<span class="st">'created_year'</span>].astype(<span class="st">'category'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting using Plotly Express</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter(df, x<span class="op">=</span><span class="st">'posting_karma'</span>, y<span class="op">=</span><span class="st">'creator_score'</span>, color<span class="op">=</span><span class="st">'created_year'</span>, title<span class="op">=</span><span class="st">'Relationship between Posting Karma and Creator Score'</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                 labels<span class="op">=</span>{<span class="st">'posting_karma'</span>: <span class="st">'Posting Karma'</span>, <span class="st">'creator_score'</span>: <span class="st">'Creator Score'</span>, <span class="st">'created_year'</span>: <span class="st">'Created Year'</span>},</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                 hover_data<span class="op">=</span>[<span class="st">'author'</span>],</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                 size<span class="op">=</span>[<span class="fl">0.5</span>] <span class="op">*</span> <span class="bu">len</span>(df))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>fig.write_html(<span class="st">'../../data/plots/karma_relation_plot.html'</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>fig.show()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Pearson correlation coefficient and p-value</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>correlation_coefficient, p_value <span class="op">=</span> pearsonr(df[<span class="st">'posting_karma'</span>], df[<span class="st">'creator_score'</span>])</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Pearson Correlation Coefficient: </span><span class="sc">{</span><span class="bu">round</span>(correlation_coefficient,<span class="dv">3</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"P-value: </span><span class="sc">{</span><span class="bu">round</span>(p_value,<span class="dv">3</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="4200c3d8-7153-41fa-a0a6-b4acc5b8b7b1" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("4200c3d8-7153-41fa-a0a6-b4acc5b8b7b1")) {                    Plotly.newPlot(                        "4200c3d8-7153-41fa-a0a6-b4acc5b8b7b1",                        [{"customdata":[["ahbagelxo"],["cigarte"],["urfavdisappointmentf"],["sadperson123456"],["Veeeeezy"],["kyrazyme"],["glowymel"],["waterfromthevalley"],["Theotherdaytho"],["Dominorepulsa"]],"hovertemplate":"Created Year=2021<br>Posting Karma=%{x}<br>Creator Score=%{y}<br>size=%{marker.size}<br>author=%{customdata[0]}<extra></extra>","legendgroup":"2021","marker":{"color":"#636efa","size":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],"sizemode":"area","sizeref":0.00125,"symbol":"circle"},"mode":"markers","name":"2021","orientation":"v","showlegend":true,"x":[129078,177409,61350,92361,325270,57773,99984,145266,32888,55993],"xaxis":"x","y":[116159.577,89684.031,66008.876,63073.23,61284.914,57412.021,48020.679,43339.453,42378.94,39295.591],"yaxis":"y","type":"scatter"},{"customdata":[["Ralucamakeup"],["The_Alchemyst"],["sadperson123456"],["Butt_Fucking_Smurfs"],["ahbagelxo"],["urfavdisappointmentf"],["cuziluvmakeup"],["Brittgirl23"],["Sick-Sad-World32"],["chinghiskhan"]],"hovertemplate":"Created Year=2022<br>Posting Karma=%{x}<br>Creator Score=%{y}<br>size=%{marker.size}<br>author=%{customdata[0]}<extra></extra>","legendgroup":"2022","marker":{"color":"#EF553B","size":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],"sizemode":"area","sizeref":0.00125,"symbol":"circle"},"mode":"markers","name":"2022","orientation":"v","showlegend":true,"x":[70930,108994,92361,119404,129078,61350,16514,21458,18848,15556],"xaxis":"x","y":[160218.88,93012.218,81184.232,64631.0,62250.654,56407.277,48221.124,46164.235,37102.222,34828.134],"yaxis":"y","type":"scatter"},{"customdata":[["Faris-Hilton"],["The_Alchemyst"],["Evening_Attention_45"],["Lefty-boomer"],["zemele"],["BrandoLeeB"],["beesarebrown"],["sadperson123456"],["DisheveledBoy"],["No-Property-6892"]],"hovertemplate":"Created Year=2023<br>Posting Karma=%{x}<br>Creator Score=%{y}<br>size=%{marker.size}<br>author=%{customdata[0]}<extra></extra>","legendgroup":"2023","marker":{"color":"#00cc96","size":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],"sizemode":"area","sizeref":0.00125,"symbol":"circle"},"mode":"markers","name":"2023","orientation":"v","showlegend":true,"x":[309183,108994,14561,8177,40024,47883,10812,92361,10383,9163],"xaxis":"x","y":[55392.327,32111.733,24529.679,21076.01,19036.404,17639.649,14266.653,11884.794,11773.02,10943.0],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Posting Karma"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Creator Score"}},"legend":{"title":{"text":"Created Year"},"tracegroupgap":0,"itemsizing":"constant"},"title":{"text":"Relationship between Posting Karma and Creator Score"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('4200c3d8-7153-41fa-a0a6-b4acc5b8b7b1');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pearson Correlation Coefficient: 0.362
+P-value: 0.049</code></pre>
+</div>
+</div>
+<p>The Pearson correlation coefficient between “posting karma” and “creator score” is approximately 0.362, indicating a moderately positive correlation. The p-value of 0.0494 is close to the common significance threshold of 0.05. This suggests that there is some evidence to reject the null hypothesis that the correlation is zero (no correlation).</p>
+<p>Quality of Contributions: The positive correlation could imply that users who receive positive engagement externally out of our dataset, possibly through quality contributions or popular content, are likely to be recognized as influential contributors by our creator score calculating scheme.</p>
+<section id="why-we-choose-to-select-google-index-as-reference-data" class="level3">
+<h3 class="anchored" data-anchor-id="why-we-choose-to-select-google-index-as-reference-data">Why we choose to select Google Index as Reference Data?</h3>
+<p>Accessing external data from Google’s index of top brands and products in the Makeup and Skincare industry can offer invaluable insights for businesses. Firstly, it serves as a powerful tool for market research by unveiling current consumer trends and preferences. Identifying the most popular brands and products enables companies to stay competitive and understand the dynamics of the market. Additionally, this data facilitates competitor analysis, allowing businesses to benchmark themselves against industry leaders and identify opportunities for improvement or innovation. The information gleaned can inform product development strategies by revealing gaps in the market and areas where consumer needs are not adequately addressed.</p>
+<p>Moreover, understanding the top brands and products aids in the formulation of effective marketing strategies. It provides insights into target audiences and helps tailor promotional efforts to align with consumer interests. For businesses focusing on online presence, analyzing this data contributes to SEO optimization by identifying relevant keywords that resonate with consumer searches. This, in turn, enhances the visibility of the business in online search results.</p>
+<p>Furthermore, the data can guide content creation efforts, ensuring that businesses produce timely and relevant material that aligns with consumer interests. It also opens up opportunities for partnerships and collaborations with successful brands, leveraging their popularity to reach a broader audience. Lastly, monitoring the popularity of brands and products through Google’s index provides a means of risk mitigation by keeping businesses informed about market stability. Sudden shifts in consumer preferences or emerging trends can be detected early, allowing for proactive adjustments to business strategies. In essence, accessing external data from Google’s index is a multifaceted approach that empowers businesses across various aspects of the Makeup and Skincare industry, facilitating informed decision-making and sustained relevance in a dynamic market.</p>
+</section>
+<section id="why-we-only-get-top-5-for-both-skincare-and-makeup-brands-and-products" class="level3">
+<h3 class="anchored" data-anchor-id="why-we-only-get-top-5-for-both-skincare-and-makeup-brands-and-products">Why we Only get Top 5 for both skincare and makeup brands and products?</h3>
+<p>Due to the fluctuating nature of the top 10 skincare and makeup brands and product quantities each year, for the sake of analytical consistency, we have opted to exclusively focus on the top 5 brands and products for the years 2021-2023, along with Google Index data. The comparative analysis results are summarized below.</p>
+</section>
+</section>
+<section id="for-skincare-products" class="level1">
+<h1>For skincare Products</h1>
+<section id="comparative-analysis-of-top-5-skincare-products-2021-2023" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-of-top-5-skincare-products-2021-2023">Comparative Analysis of Top 5 Skincare Products (2021-2023)</h2>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section">2021:</h3>
+<p>In 2021, the top 5 skincare products on Reddit were predominantly moisturizer, sunscreen, mask, serum, and cleanser. Notably, moisturizer had the highest average Google index of 76, indicating a significant online presence. Sunscreen and mask followed closely with indices of 22 and 64, respectively. Serum and cleanser also ranked high with indices of 65 and 38, respectively. This suggests that, according to Reddit discussions, moisturizers were highly discussed and popular, aligning with their strong online visibility.</p>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1">2022:</h3>
+<p>The skincare landscape shifted in 2022, with sunscreen taking the lead in both Reddit mentions and average Google index (23). Moisturizer maintained a strong presence with an index of 63, indicating sustained popularity. Serum and cleanser also continued to be discussed, with indices of 70 and 33, respectively. Notably, BHA (beta hydroxy acid) entered the top 5, indicating a growing interest in specific skincare ingredients. This suggests a dynamic shift in consumer preferences and a diversification of the most talked-about products on Reddit.</p>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2">2023:</h3>
+<p>In 2023, the top 5 products on Reddit included moisturizer, sunscreen, serum, cleanser, and essence. Moisturizer maintained its high average Google index of 80, reaffirming its popularity. Sunscreen also remained significant with an index of 28. Serum saw a slight increase in index to 82, indicating sustained interest. Cleanser and essence rounded out the top 5, with cleanser seeing a minor increase in index (36). The addition of essence suggests a growing focus on specific skincare steps beyond traditional products.</p>
+</section>
+</section>
+<section id="comparative-analysis-result" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-result">Comparative Analysis Result:</h2>
+<p><strong>Meaningful Insights for Business Goals:</strong> - <strong>Moisturizer Dominance:</strong> Moisturizer consistently held a strong position throughout the three years, indicating its enduring popularity and importance in skincare routines.</p>
+<ul>
+<li><p><strong>Sunscreen’s Steady Presence:</strong> Sunscreen remained a key focus, underlining the consistent emphasis on sun protection in skincare discussions.</p></li>
+<li><p><strong>Dynamic Shifts in Product Interest:</strong> The emergence of BHA in 2022 and essence in 2023 suggests an evolving interest in specific skincare ingredients and steps beyond the traditional routine.</p></li>
+<li><p><strong>Sustained Interest in Serum:</strong> Serum consistently maintained a high level of interest, showcasing its significance in skincare discussions.</p></li>
+<li><p><strong>Cleanser’s Stability:</strong> Cleanser consistently ranked in the top 5, indicating its steady relevance in skincare routines.</p></li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In summary, the skincare landscape witnessed dynamic changes over the three years, with certain products maintaining their popularity (e.g., moisturizer, sunscreen) and others entering the spotlight (e.g., BHA in 2022, essence in 2023). These trends highlight the evolving preferences and interests within the skincare community, as reflected in both Reddit discussions and the average Google index of the mentioned products.</p>
+</section>
+</section>
+<section id="for-skincare-brands" class="level1">
+<h1>For skincare Brands</h1>
+<section id="comparative-analysis-of-top-5-skincare-brands-2021-2023" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-of-top-5-skincare-brands-2021-2023">Comparative Analysis of Top 5 Skincare Brands (2021-2023)</h2>
+</section>
+<section id="section-3" class="level2">
+<h2 class="anchored" data-anchor-id="section-3">2021:</h2>
+<p>In 2021, Reddit discussions on skincare revealed a clear hierarchy of popular products. <strong>Moisturizer</strong> emerged as a standout, with a substantial Google index of 76, indicating its widespread recognition and usage. <strong>Sunscreen</strong> followed closely with an index of 22, underlining its importance in skincare routines. Notably, <strong>masks</strong> garnered considerable attention, boasting a high index of 64. <strong>Serums</strong> and <strong>cleansers</strong> also held strong positions in the top 5, with indices of 65 and 38, respectively. This data suggests a balanced interest in a variety of skincare categories, with a particular focus on moisturizing and protective measures.</p>
+</section>
+<section id="section-4" class="level2">
+<h2 class="anchored" data-anchor-id="section-4">2022:</h2>
+<p>The skincare landscape underwent notable changes in 2022. <strong>Sunscreen</strong> surged to the forefront, both in Reddit mentions and with the highest average Google index of 23, indicating an increased emphasis on sun protection. <strong>Moisturizer</strong> maintained its popularity with a substantial index of 63, suggesting its enduring significance. <strong>Serum</strong> experienced a significant boost in interest, reflected in its elevated index of 70. <strong>Cleansers</strong> remained in the top 5 but with a slightly reduced index of 33. Notably, the introduction of <strong>BHA</strong> to the top 5 indicated a growing fascination with specific skincare ingredients.</p>
+</section>
+<section id="section-5" class="level2">
+<h2 class="anchored" data-anchor-id="section-5">2023:</h2>
+<p>In 2023, the skincare discussions continued to evolve. <strong>Moisturizer</strong> retained its dominance, boasting an increased Google index of 80. <strong>Sunscreen</strong>, although slightly less prominent than moisturizer, maintained a significant presence with an index of 28. <strong>Serum</strong> sustained its high level of interest with an impressive index of 82. <strong>Cleansers</strong> continued to be relevant, though with a slightly diminished index of 36. <strong>Essence</strong> made its appearance in the top 5, reflecting a growing interest in additional skincare steps beyond the conventional routine. This suggests an expanding and diversifying landscape of skincare preferences.</p>
+</section>
+<section id="comparative-analysis-result-1" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-result-1">Comparative Analysis Result:</h2>
+<p><strong>Meaningful Insights for Business Goals:</strong></p>
+<ul>
+<li><p><strong>Consistent Favorites:</strong> Moisturizer and sunscreen consistently held top positions, emphasizing their enduring importance in skincare routines.</p></li>
+<li><p><strong>Dynamic Shifts:</strong> The inclusion of BHA in 2022 and essence in 2023 showcased evolving interests, reflecting a dynamic and diverse skincare landscape.</p></li>
+<li><p><strong>Sustained Interest in Serums:</strong> Serums consistently maintained a high level of interest, indicating their significance in skincare discussions.</p></li>
+<li><p><strong>Cleanser’s Stability:</strong> Cleansers remained relevant, though with slight variations in popularity.</p></li>
+</ul>
+</section>
+<section id="conclusion-1" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-1">Conclusion</h2>
+<p>In conclusion, the skincare landscape evolved over the three years, with certain products maintaining their popularity and new elements entering the spotlight. The consistent dominance of moisturizer and sunscreen, along with the emergence of specific ingredients like BHA and steps like essence, highlights the dynamic and diverse nature of skincare trends within the Makeupaddiction community. The Google indices provide quantitative insights into the online visibility and discussions surrounding these products.</p>
+</section>
+</section>
+<section id="for-makeup-brands" class="level1">
+<h1>For Makeup Brands</h1>
+<section id="comparative-analysis-of-top-5-makeup-brands-2021-2023" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-of-top-5-makeup-brands-2021-2023">Comparative Analysis of Top 5 Makeup Brands (2021-2023)</h2>
+</section>
+<section id="section-6" class="level2">
+<h2 class="anchored" data-anchor-id="section-6">2021:</h2>
+<p>In 2021, the landscape of makeup brands on Reddit showcased a clear hierarchy. <strong>Mac</strong> dominated the discussions, securing the top position with a considerable Google index of 49, indicative of its widespread recognition and popularity. <strong>Maybelline</strong>, although ranking second in Reddit mentions, had a notably lower average Google index of 6, suggesting potential for increased online visibility. <strong>Nyx</strong> and <strong>Sephora</strong> held their positions in the top 5, with Sephora displaying a higher index of 28, emphasizing its strong online presence. <strong>Loreal</strong>, with a significant index of 34, rounded out the top 5, demonstrating sustained popularity.</p>
+</section>
+<section id="section-7" class="level2">
+<h2 class="anchored" data-anchor-id="section-7">2022:</h2>
+<p>The makeup landscape underwent notable changes in 2022. <strong>Maybelline</strong> surged to the forefront, taking the lead with an increased average Google index of 7, indicating growing popularity and online visibility. <strong>Mac</strong> maintained its stronghold with a consistent index of 49, affirming its enduring brand recognition. The introduction of <strong>Nars</strong> and <strong>Colourpop</strong> to the top 5 showcased evolving interests, with Colourpop entering the list despite having a low Google index of 1. <strong>Sephora</strong> continued to be a significant player, with an increased index of 37.</p>
+</section>
+<section id="section-8" class="level2">
+<h2 class="anchored" data-anchor-id="section-8">2023:</h2>
+<p>In 2023, the makeup discussions continued to evolve, revealing shifts in brand preferences. <strong>Elf</strong> emerged as the top brand with a moderate average Google index of 16, indicating a rise in popularity. <strong>Maybelline</strong> maintained its strong presence with a consistent index of 15, underscoring its continued popularity. <strong>Nyx</strong> retained its relevance with a moderate index, while <strong>Benefit</strong> entered the top 5, showcasing a growing interest. <strong>Mac</strong>, while still popular, saw a decrease in index, suggesting a slight decline in online visibility.</p>
+</section>
+<section id="comparative-analysis-result-2" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-result-2">Comparative Analysis Result:</h2>
+<p><strong>Meaningful Insights for Business Goals:</strong></p>
+<ul>
+<li><p><strong>Maybelline’s Consistency:</strong> Maybelline consistently held a top position across the three years, maintaining popularity and relevance.</p></li>
+<li><p><strong>Mac’s Enduring Presence:</strong> Mac remained a dominant force, consistently ranking high in both Reddit mentions and Google index, showcasing enduring brand recognition.</p></li>
+<li><p><strong>Dynamic Shifts:</strong> The introduction of new brands like Nars, Colourpop, Elf, and Benefit reflected dynamic shifts and evolving interests in the makeup community.</p></li>
+<li><p><strong>Sephora’s Steady Presence:</strong> Sephora consistently held a strong position, reflecting its sustained popularity and significance.</p></li>
+</ul>
+</section>
+<section id="conclusion-2" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-2">Conclusion:</h2>
+<p>The makeup landscape experienced dynamic shifts over the three years, with certain brands maintaining their popularity and new entrants gaining traction. Maybelline consistently held a top position, while Mac demonstrated enduring brand recognition. The introduction of new brands and fluctuations in Google indices indicate the ever-evolving nature of makeup brand preferences within the Makeupaddiction community. The Google indices provide valuable insights into the online visibility and discussions surrounding these brands.</p>
+</section>
+</section>
+<section id="for-makeup-products" class="level1">
+<h1>For Makeup Products</h1>
+<section id="comparative-analysis-of-top-5-makeup-products-2021-2023" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-of-top-5-makeup-products-2021-2023">Comparative Analysis of Top 5 Makeup Products (2021-2023)</h2>
+</section>
+<section id="section-9" class="level2">
+<h2 class="anchored" data-anchor-id="section-9">2021:</h2>
+<p>In 2021, the landscape of makeup products revealed interesting patterns. <strong>Mascara</strong> emerged as the most-discussed product with a notably low average Google index of 5, suggesting room for increased online visibility and discussions. <strong>Foundation</strong> and <strong>Lipstick</strong> secured the second and third positions with indices of 27 and 55, respectively, indicating a moderate to high level of interest. <strong>Concealer</strong> had a low index of 3, signaling potential for increased online visibility, while <strong>Powder</strong> rounded out the top 5 with a moderate index of 10.</p>
+</section>
+<section id="section-10" class="level2">
+<h2 class="anchored" data-anchor-id="section-10">2022:</h2>
+<p>The makeup landscape witnessed dynamic shifts in 2022. <strong>Foundation</strong> surged to the forefront, claiming the top spot with a significantly higher average Google index of 50, showcasing a substantial increase in popularity. <strong>Mascara</strong> maintained its relevance with an increased index of 10, indicating sustained popularity. <strong>Lipstick</strong> held a strong position with an impressive index of 79, affirming its enduring popularity. <strong>Concealer</strong> sustained interest with a moderate increase in average index. <strong>Powder</strong> remained in the top 5 but with an increased index of 20, reflecting growing interest.</p>
+</section>
+<section id="section-11" class="level2">
+<h2 class="anchored" data-anchor-id="section-11">2023:</h2>
+<p>In 2023, the makeup discussions continued to evolve, revealing shifts in product preferences. <strong>Mascara</strong> continued to be a popular choice, with a moderate increase in average index, indicating sustained interest. <strong>Foundation</strong> retained its relevance with a moderate increase in average index, suggesting continued popularity. <strong>Lipstick</strong> maintained a strong presence with a moderate average index, showcasing consistent popularity. <strong>Primer</strong> entered the top 5 with a low average index of 5, indicating potential for increased online visibility. <strong>Eyeliner</strong> rounded out the top 5 with a moderate increase in average index, reflecting sustained interest.</p>
+</section>
+<section id="comparative-analysis-result-3" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-result-3">Comparative Analysis Result:</h2>
+<p><strong>Meaningful Insights for Business Goals:</strong></p>
+<ul>
+<li><p><strong>Trend Identification:</strong> Foundation consistently emerged as a significant trend, experiencing a substantial increase in popularity in 2022. This trend continued in 2023, reinforcing its importance in the makeup industry.</p></li>
+<li><p><strong>Stable Performers:</strong> Mascara, lipstick, and concealer remained stable performers across the three years, indicating their enduring popularity and consistent relevance to makeup enthusiasts.</p></li>
+<li><p><strong>New Entrants:</strong> Primer entered the top 5 in 2023, suggesting a potential emerging trend or heightened interest in this makeup product. This insight could be valuable for businesses looking to capitalize on evolving consumer preferences.</p></li>
+<li><p><strong>Sustained Interest:</strong> Products like mascara and foundation consistently held the top positions, indicating sustained interest and popularity. This stability could guide business strategies for product development, marketing, and inventory management.</p></li>
+</ul>
+</section>
+<section id="conclusion-3" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-3">Conclusion:</h2>
+<p>In conclusion, the comparative analysis of makeup products from 2021 to 2023 provides valuable insights into shifting trends, stable performers, and potential emerging products. Businesses can leverage this information to align their strategies with consumer preferences, optimize marketing efforts, and capitalize on the evolving landscape of makeup trends.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

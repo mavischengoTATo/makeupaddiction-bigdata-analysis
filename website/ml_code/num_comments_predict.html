@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>num_comments_predict</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="num_comments_predict_files/libs/clipboard/clipboard.min.js"></script>
+<script src="num_comments_predict_files/libs/quarto-html/quarto.js"></script>
+<script src="num_comments_predict_files/libs/quarto-html/popper.min.js"></script>
+<script src="num_comments_predict_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="num_comments_predict_files/libs/quarto-html/anchor.min.js"></script>
+<link href="num_comments_predict_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="num_comments_predict_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="num_comments_predict_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="num_comments_predict_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="num_comments_predict_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<div class="cell" data-jupyter="{&quot;outputs_hidden&quot;:true}" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup - Run only once per Kernel App</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>conda install openjdk <span class="op">-</span>y</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install PySpark</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install pyspark<span class="op">==</span><span class="fl">3.4.0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># install spark-nlp</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install spark<span class="op">-</span>nlp<span class="op">==</span><span class="fl">5.1.3</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># restart kernel</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.core.display <span class="im">import</span> HTML</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>HTML(<span class="st">"&lt;script&gt;Jupyter.notebook.kernel.restart()&lt;/script&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+
+==&gt; WARNING: A newer version of conda exists. &lt;==
+  current version: 23.3.1
+  latest version: 23.11.0
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+Or to minimize the number of packages updated during conda update use
+
+     conda install conda=23.11.0
+
+
+
+## Package Plan ##
+
+  environment location: /opt/conda
+
+  added / updated specs:
+    - openjdk
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    ca-certificates-2023.08.22 |       h06a4308_0         123 KB
+    certifi-2023.11.17         |  py310h06a4308_0         158 KB
+    openjdk-11.0.13            |       h87a67e3_0       341.0 MB
+    ------------------------------------------------------------
+                                           Total:       341.3 MB
+
+The following NEW packages will be INSTALLED:
+
+  openjdk            pkgs/main/linux-64::openjdk-11.0.13-h87a67e3_0 
+
+The following packages will be UPDATED:
+
+  ca-certificates    conda-forge::ca-certificates-2023.7.2~ --&gt; pkgs/main::ca-certificates-2023.08.22-h06a4308_0 
+  certifi            conda-forge/noarch::certifi-2023.7.22~ --&gt; pkgs/main/linux-64::certifi-2023.11.17-py310h06a4308_0 
+
+
+
+Downloading and Extracting Packages
+certifi-2023.11.17   | 158 KB    |                                       |   0% 
+openjdk-11.0.13      | 341.0 MB  |                                       |   0% 
+
+ca-certificates-2023 | 123 KB    |                                       |   0% 
+openjdk-11.0.13      | 341.0 MB  | 1                                     |   0% 
+
+ca-certificates-2023 | 123 KB    | ##################################### | 100% 
+
+certifi-2023.11.17   | 158 KB    | ##################################### | 100% 
+openjdk-11.0.13      | 341.0 MB  | #3                                    |   4% 
+openjdk-11.0.13      | 341.0 MB  | ##6                                   |   7% 
+openjdk-11.0.13      | 341.0 MB  | ###8                                  |  10% 
+openjdk-11.0.13      | 341.0 MB  | ####8                                 |  13% 
+openjdk-11.0.13      | 341.0 MB  | #####9                                |  16% 
+openjdk-11.0.13      | 341.0 MB  | ######9                               |  19% 
+openjdk-11.0.13      | 341.0 MB  | #######9                              |  21% 
+openjdk-11.0.13      | 341.0 MB  | #########4                            |  26% 
+openjdk-11.0.13      | 341.0 MB  | ###########1                          |  30% 
+openjdk-11.0.13      | 341.0 MB  | ############7                         |  34% 
+openjdk-11.0.13      | 341.0 MB  | ##############3                       |  39% 
+openjdk-11.0.13      | 341.0 MB  | ###############8                      |  43% 
+openjdk-11.0.13      | 341.0 MB  | #################4                    |  47% 
+openjdk-11.0.13      | 341.0 MB  | ###################1                  |  52% 
+openjdk-11.0.13      | 341.0 MB  | ####################6                 |  56% 
+openjdk-11.0.13      | 341.0 MB  | ######################                |  60% 
+openjdk-11.0.13      | 341.0 MB  | #######################6              |  64% 
+openjdk-11.0.13      | 341.0 MB  | #########################1            |  68% 
+openjdk-11.0.13      | 341.0 MB  | ##########################5           |  72% 
+openjdk-11.0.13      | 341.0 MB  | ###########################9          |  76% 
+openjdk-11.0.13      | 341.0 MB  | #############################2        |  79% 
+openjdk-11.0.13      | 341.0 MB  | ##############################6       |  83% 
+openjdk-11.0.13      | 341.0 MB  | ###############################9      |  86% 
+openjdk-11.0.13      | 341.0 MB  | #################################1    |  89% 
+openjdk-11.0.13      | 341.0 MB  | ##################################2   |  93% 
+openjdk-11.0.13      | 341.0 MB  | ###################################4  |  96% 
+openjdk-11.0.13      | 341.0 MB  | ####################################8 | 100% 
+                                                                                
+                                                                                
+
+                                                                                
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+
+Note: you may need to restart the kernel to use updated packages.
+Collecting pyspark==3.4.0
+  Using cached pyspark-3.4.0-py2.py3-none-any.whl
+Collecting py4j==0.10.9.7 (from pyspark==3.4.0)
+  Using cached py4j-0.10.9.7-py2.py3-none-any.whl (200 kB)
+Installing collected packages: py4j, pyspark
+Successfully installed py4j-0.10.9.7 pyspark-3.4.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.2.1 -&gt; 23.3.1
+[notice] To update, run: pip install --upgrade pip
+Note: you may need to restart the kernel to use updated packages.
+Collecting spark-nlp==5.1.3
+  Obtaining dependency information for spark-nlp==5.1.3 from https://files.pythonhosted.org/packages/cd/7d/bc0eca4c9ec4c9c1d9b28c42c2f07942af70980a7d912d0aceebf8db32dd/spark_nlp-5.1.3-py2.py3-none-any.whl.metadata
+  Using cached spark_nlp-5.1.3-py2.py3-none-any.whl.metadata (53 kB)
+Using cached spark_nlp-5.1.3-py2.py3-none-any.whl (537 kB)
+Installing collected packages: spark-nlp
+Successfully installed spark-nlp-5.1.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.2.1 -&gt; 23.3.1
+[notice] To update, run: pip install --upgrade pip
+Note: you may need to restart the kernel to use updated packages.</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<script>Jupyter.notebook.kernel.restart()</script>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sparknlp</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.base <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml <span class="im">import</span> Pipeline</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.annotator <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark.sql.functions <span class="im">as</span> F</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.pretrained <span class="im">import</span> PretrainedPipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession.builder <span class="op">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">"Spark NLP and PySparkApp"</span>) <span class="op">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    .master(<span class="st">"local[*]"</span>) <span class="op">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.driver.memory"</span>, <span class="st">"16G"</span>) <span class="op">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.driver.maxResultSize"</span>, <span class="st">"0"</span>) <span class="op">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.kryoserializer.buffer.max"</span>, <span class="st">"2000M"</span>) <span class="op">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.jars.packages"</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"com.johnsnowlabs.nlp:spark-nlp_2.12:5.1.3,org.apache.hadoop:hadoop-aws:3.2.2"</span>) <span class="op">\</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.hadoop.fs.s3a.impl"</span>, <span class="st">"org.apache.hadoop.fs.s3a.S3AFileSystem"</span>) <span class="op">\</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"fs.s3a.aws.credentials.provider"</span>, <span class="st">"com.amazonaws.auth.ContainerCredentialsProvider"</span>) <span class="op">\</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Ignoring non-Spark config property: fs.s3a.aws.credentials.provider
+Ivy Default Cache set to: /root/.ivy2/cache
+The jars for the packages stored in: /root/.ivy2/jars
+com.johnsnowlabs.nlp#spark-nlp_2.12 added as a dependency
+org.apache.hadoop#hadoop-aws added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-cf4b7f5b-83ea-4360-ac1e-4cd9940c7856;1.0
+    confs: [default]
+    found com.johnsnowlabs.nlp#spark-nlp_2.12;5.1.3 in central
+    found com.typesafe#config;1.4.2 in central
+    found org.rocksdb#rocksdbjni;6.29.5 in central
+    found com.amazonaws#aws-java-sdk-bundle;1.11.828 in central
+    found com.github.universal-automata#liblevenshtein;3.0.0 in central
+    found com.google.protobuf#protobuf-java-util;3.0.0-beta-3 in central
+    found com.google.protobuf#protobuf-java;3.0.0-beta-3 in central
+    found com.google.code.gson#gson;2.3 in central
+    found it.unimi.dsi#fastutil;7.0.12 in central
+    found org.projectlombok#lombok;1.16.8 in central
+    found com.google.cloud#google-cloud-storage;2.20.1 in central
+    found com.google.guava#guava;31.1-jre in central
+    found com.google.guava#failureaccess;1.0.1 in central
+    found com.google.guava#listenablefuture;9999.0-empty-to-avoid-conflict-with-guava in central
+    found com.google.errorprone#error_prone_annotations;2.18.0 in central
+    found com.google.j2objc#j2objc-annotations;1.3 in central
+    found com.google.http-client#google-http-client;1.43.0 in central
+    found io.opencensus#opencensus-contrib-http-util;0.31.1 in central
+    found com.google.http-client#google-http-client-jackson2;1.43.0 in central
+    found com.google.http-client#google-http-client-gson;1.43.0 in central
+    found com.google.api-client#google-api-client;2.2.0 in central
+    found commons-codec#commons-codec;1.15 in central
+    found com.google.oauth-client#google-oauth-client;1.34.1 in central
+    found com.google.http-client#google-http-client-apache-v2;1.43.0 in central
+    found com.google.apis#google-api-services-storage;v1-rev20220705-2.0.0 in central
+    found com.google.code.gson#gson;2.10.1 in central
+    found com.google.cloud#google-cloud-core;2.12.0 in central
+    found io.grpc#grpc-context;1.53.0 in central
+    found com.google.auto.value#auto-value-annotations;1.10.1 in central
+    found com.google.auto.value#auto-value;1.10.1 in central
+    found javax.annotation#javax.annotation-api;1.3.2 in central
+    found commons-logging#commons-logging;1.2 in central
+    found com.google.cloud#google-cloud-core-http;2.12.0 in central
+    found com.google.http-client#google-http-client-appengine;1.43.0 in central
+    found com.google.api#gax-httpjson;0.108.2 in central
+    found com.google.cloud#google-cloud-core-grpc;2.12.0 in central
+    found io.grpc#grpc-alts;1.53.0 in central
+    found io.grpc#grpc-grpclb;1.53.0 in central
+    found org.conscrypt#conscrypt-openjdk-uber;2.5.2 in central
+    found io.grpc#grpc-auth;1.53.0 in central
+    found io.grpc#grpc-protobuf;1.53.0 in central
+    found io.grpc#grpc-protobuf-lite;1.53.0 in central
+    found io.grpc#grpc-core;1.53.0 in central
+    found com.google.api#gax;2.23.2 in central
+    found com.google.api#gax-grpc;2.23.2 in central
+    found com.google.auth#google-auth-library-credentials;1.16.0 in central
+    found com.google.auth#google-auth-library-oauth2-http;1.16.0 in central
+    found com.google.api#api-common;2.6.2 in central
+    found io.opencensus#opencensus-api;0.31.1 in central
+    found com.google.api.grpc#proto-google-iam-v1;1.9.2 in central
+    found com.google.protobuf#protobuf-java;3.21.12 in central
+    found com.google.protobuf#protobuf-java-util;3.21.12 in central
+    found com.google.api.grpc#proto-google-common-protos;2.14.2 in central
+    found org.threeten#threetenbp;1.6.5 in central
+    found com.google.api.grpc#proto-google-cloud-storage-v2;2.20.1-alpha in central
+    found com.google.api.grpc#grpc-google-cloud-storage-v2;2.20.1-alpha in central
+    found com.google.api.grpc#gapic-google-cloud-storage-v2;2.20.1-alpha in central
+    found com.fasterxml.jackson.core#jackson-core;2.14.2 in central
+    found com.google.code.findbugs#jsr305;3.0.2 in central
+    found io.grpc#grpc-api;1.53.0 in central
+    found io.grpc#grpc-stub;1.53.0 in central
+    found org.checkerframework#checker-qual;3.31.0 in central
+    found io.perfmark#perfmark-api;0.26.0 in central
+    found com.google.android#annotations;4.1.1.4 in central
+    found org.codehaus.mojo#animal-sniffer-annotations;1.22 in central
+    found io.opencensus#opencensus-proto;0.2.0 in central
+    found io.grpc#grpc-services;1.53.0 in central
+    found com.google.re2j#re2j;1.6 in central
+    found io.grpc#grpc-netty-shaded;1.53.0 in central
+    found io.grpc#grpc-googleapis;1.53.0 in central
+    found io.grpc#grpc-xds;1.53.0 in central
+    found com.navigamez#greex;1.0 in central
+    found dk.brics.automaton#automaton;1.11-8 in central
+    found com.johnsnowlabs.nlp#tensorflow-cpu_2.12;0.4.4 in central
+    found com.microsoft.onnxruntime#onnxruntime;1.15.0 in central
+    found org.apache.hadoop#hadoop-aws;3.2.2 in central
+:: resolution report :: resolve 6250ms :: artifacts dl 584ms
+    :: modules in use:
+    com.amazonaws#aws-java-sdk-bundle;1.11.828 from central in [default]
+    com.fasterxml.jackson.core#jackson-core;2.14.2 from central in [default]
+    com.github.universal-automata#liblevenshtein;3.0.0 from central in [default]
+    com.google.android#annotations;4.1.1.4 from central in [default]
+    com.google.api#api-common;2.6.2 from central in [default]
+    com.google.api#gax;2.23.2 from central in [default]
+    com.google.api#gax-grpc;2.23.2 from central in [default]
+    com.google.api#gax-httpjson;0.108.2 from central in [default]
+    com.google.api-client#google-api-client;2.2.0 from central in [default]
+    com.google.api.grpc#gapic-google-cloud-storage-v2;2.20.1-alpha from central in [default]
+    com.google.api.grpc#grpc-google-cloud-storage-v2;2.20.1-alpha from central in [default]
+    com.google.api.grpc#proto-google-cloud-storage-v2;2.20.1-alpha from central in [default]
+    com.google.api.grpc#proto-google-common-protos;2.14.2 from central in [default]
+    com.google.api.grpc#proto-google-iam-v1;1.9.2 from central in [default]
+    com.google.apis#google-api-services-storage;v1-rev20220705-2.0.0 from central in [default]
+    com.google.auth#google-auth-library-credentials;1.16.0 from central in [default]
+    com.google.auth#google-auth-library-oauth2-http;1.16.0 from central in [default]
+    com.google.auto.value#auto-value;1.10.1 from central in [default]
+    com.google.auto.value#auto-value-annotations;1.10.1 from central in [default]
+    com.google.cloud#google-cloud-core;2.12.0 from central in [default]
+    com.google.cloud#google-cloud-core-grpc;2.12.0 from central in [default]
+    com.google.cloud#google-cloud-core-http;2.12.0 from central in [default]
+    com.google.cloud#google-cloud-storage;2.20.1 from central in [default]
+    com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+    com.google.code.gson#gson;2.10.1 from central in [default]
+    com.google.errorprone#error_prone_annotations;2.18.0 from central in [default]
+    com.google.guava#failureaccess;1.0.1 from central in [default]
+    com.google.guava#guava;31.1-jre from central in [default]
+    com.google.guava#listenablefuture;9999.0-empty-to-avoid-conflict-with-guava from central in [default]
+    com.google.http-client#google-http-client;1.43.0 from central in [default]
+    com.google.http-client#google-http-client-apache-v2;1.43.0 from central in [default]
+    com.google.http-client#google-http-client-appengine;1.43.0 from central in [default]
+    com.google.http-client#google-http-client-gson;1.43.0 from central in [default]
+    com.google.http-client#google-http-client-jackson2;1.43.0 from central in [default]
+    com.google.j2objc#j2objc-annotations;1.3 from central in [default]
+    com.google.oauth-client#google-oauth-client;1.34.1 from central in [default]
+    com.google.protobuf#protobuf-java;3.21.12 from central in [default]
+    com.google.protobuf#protobuf-java-util;3.21.12 from central in [default]
+    com.google.re2j#re2j;1.6 from central in [default]
+    com.johnsnowlabs.nlp#spark-nlp_2.12;5.1.3 from central in [default]
+    com.johnsnowlabs.nlp#tensorflow-cpu_2.12;0.4.4 from central in [default]
+    com.microsoft.onnxruntime#onnxruntime;1.15.0 from central in [default]
+    com.navigamez#greex;1.0 from central in [default]
+    com.typesafe#config;1.4.2 from central in [default]
+    commons-codec#commons-codec;1.15 from central in [default]
+    commons-logging#commons-logging;1.2 from central in [default]
+    dk.brics.automaton#automaton;1.11-8 from central in [default]
+    io.grpc#grpc-alts;1.53.0 from central in [default]
+    io.grpc#grpc-api;1.53.0 from central in [default]
+    io.grpc#grpc-auth;1.53.0 from central in [default]
+    io.grpc#grpc-context;1.53.0 from central in [default]
+    io.grpc#grpc-core;1.53.0 from central in [default]
+    io.grpc#grpc-googleapis;1.53.0 from central in [default]
+    io.grpc#grpc-grpclb;1.53.0 from central in [default]
+    io.grpc#grpc-netty-shaded;1.53.0 from central in [default]
+    io.grpc#grpc-protobuf;1.53.0 from central in [default]
+    io.grpc#grpc-protobuf-lite;1.53.0 from central in [default]
+    io.grpc#grpc-services;1.53.0 from central in [default]
+    io.grpc#grpc-stub;1.53.0 from central in [default]
+    io.grpc#grpc-xds;1.53.0 from central in [default]
+    io.opencensus#opencensus-api;0.31.1 from central in [default]
+    io.opencensus#opencensus-contrib-http-util;0.31.1 from central in [default]
+    io.opencensus#opencensus-proto;0.2.0 from central in [default]
+    io.perfmark#perfmark-api;0.26.0 from central in [default]
+    it.unimi.dsi#fastutil;7.0.12 from central in [default]
+    javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+    org.apache.hadoop#hadoop-aws;3.2.2 from central in [default]
+    org.checkerframework#checker-qual;3.31.0 from central in [default]
+    org.codehaus.mojo#animal-sniffer-annotations;1.22 from central in [default]
+    org.conscrypt#conscrypt-openjdk-uber;2.5.2 from central in [default]
+    org.projectlombok#lombok;1.16.8 from central in [default]
+    org.rocksdb#rocksdbjni;6.29.5 from central in [default]
+    org.threeten#threetenbp;1.6.5 from central in [default]
+    :: evicted modules:
+    com.google.protobuf#protobuf-java-util;3.0.0-beta-3 by [com.google.protobuf#protobuf-java-util;3.21.12] in [default]
+    com.google.protobuf#protobuf-java;3.0.0-beta-3 by [com.google.protobuf#protobuf-java;3.21.12] in [default]
+    com.google.code.gson#gson;2.3 by [com.google.code.gson#gson;2.10.1] in [default]
+    com.amazonaws#aws-java-sdk-bundle;1.11.563 by [com.amazonaws#aws-java-sdk-bundle;1.11.828] in [default]
+    ---------------------------------------------------------------------
+    |                  |            modules            ||   artifacts   |
+    |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+    ---------------------------------------------------------------------
+    |      default     |   77  |   0   |   0   |   4   ||   73  |   0   |
+    ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-cf4b7f5b-83ea-4360-ac1e-4cd9940c7856
+    confs: [default]
+    0 artifacts copied, 73 already retrieved (0kB/181ms)
+23/12/06 20:36:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>:: loading settings :: url = jar:file:/opt/conda/lib/python3.10/site-packages/pyspark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sagemaker</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>session <span class="op">=</span> sagemaker.Session()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> session.default_bucket()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>output_prefix_data_submissions <span class="op">=</span> <span class="ss">f"project/submissions/yyyy=*"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>s3_path <span class="op">=</span> <span class="ss">f"s3a://</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>output_prefix_data_submissions<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"reading submissions from </span><span class="sc">{</span>s3_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>submissions <span class="op">=</span> spark.read.parquet(s3_path, header<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"shape of the submissions dataframe is </span><span class="sc">{</span>submissions<span class="sc">.</span>count()<span class="sc">:,}</span><span class="ss">x</span><span class="sc">{</span><span class="bu">len</span>(submissions.columns)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /root/.config/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /root/.config/sagemaker/config.yaml
+reading submissions from s3a://sagemaker-us-east-1-834346005548/project/submissions/yyyy=*
+shape of the submissions dataframe is 95,932x68
+CPU times: user 3.45 s, sys: 252 ms, total: 3.7 s
+Wall time: 6min 34s</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>23/12/06 20:37:15 WARN MetricsConfig: Cannot locate configuration: tried hadoop-metrics2-s3a-file-system.properties,hadoop-metrics2.properties
+23/12/06 20:37:27 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+[Stage 1:========================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>topcreators<span class="op">=</span> pd.read_csv(<span class="st">'../../data/csv/Top100Creators.csv'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>topcreators<span class="op">=</span> topcreators[<span class="st">'author'</span>].tolist()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>topcreators <span class="op">=</span> <span class="bu">list</span>(<span class="bu">set</span>(topcreators))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> col, explode, regexp_replace, expr, <span class="bu">sum</span> <span class="im">as</span> sum_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sparknlp</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> col, lower, regexp_replace, trim, when, count, desc, <span class="bu">sum</span> <span class="im">as</span> sum_</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.window <span class="im">import</span> Window</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> rank</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.base <span class="im">import</span> DocumentAssembler</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.annotator <span class="im">import</span> Tokenizer, Normalizer</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sparknlp.base <span class="im">import</span> Finisher</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml <span class="im">import</span> Pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> length</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>submissions_var<span class="op">=</span> submissions.withColumn(<span class="st">"created_hour"</span>,F.hour(F.to_timestamp(F.col(<span class="st">"created_utc"</span>).cast(<span class="st">'int'</span>))))<span class="op">\</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">'text_length'</span>,F.length(F.col(<span class="st">'selftext'</span>)))<span class="op">\</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">"title_length"</span>, length(col(<span class="st">"title"</span>)))<span class="op">\</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">"is_top_100_creator"</span>, col(<span class="st">"author"</span>).isin(topcreators))<span class="op">\</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">"is_peak_hour"</span>, col(<span class="st">"created_hour"</span>).isin([<span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>, <span class="dv">0</span>]))<span class="op">\</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">"has_media"</span>, col(<span class="st">"media"</span>).isNotNull() <span class="op">|</span> col(<span class="st">"media_embed"</span>).getField(<span class="st">'content'</span>).isNotNull())<span class="op">\</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                            .withColumn(<span class="st">"is_long_text"</span>,(F.col(<span class="st">'text_length'</span>) <span class="op">&gt;</span> <span class="dv">200</span>))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Dummy submissions varaibles</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>submissions_var<span class="op">=</span> submissions_var.withColumn(<span class="st">"skincare"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)body|(?i)hair|(?i)facial|(?i)nails|(?i)lip|(?i)sunscreen|(?i)SPF|(?i)acne|(?i)pimples|(?i)scar|(?i)aging"""</span>))<span class="op">\</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                                  .withColumn(<span class="st">"skincare_product"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)moisturizer|(?i)cleanser|(?i)serum|(?i)toner|(?i)lotion"""</span>))<span class="op">\</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                                  .withColumn(<span class="st">"skincare_product_brand"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)Clinique|(?i)Neutrogena|(?i)Cetaphil|(?i)Kiehl's|(?i)Olay"""</span>))<span class="op">\</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                                  .withColumn(<span class="st">"makeup"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)beauty|(?i)bodypaint|(?i)cosmetics|(?i)style|(?i)artist|(?i)cosplay|(?i)fashion|(?i)celebrity|(?i)party|(?i)wedding|(?i)palette"""</span>))<span class="op">\</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                                  .withColumn(<span class="st">"makeup_product"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)eyeliner|(?i)contour|(?i)foundation|(?i)blush|(?i)lipstick|(?i)concealer"""</span>))<span class="op">\</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                                  .withColumn(<span class="st">"makeup_product_brand"</span>,F.col(<span class="st">"selftext"</span>).rlike(<span class="st">"""(?i)MAC|(?i)NARS|(?i)Sephora|(?i)Fenty|(?i)Revlon|(?i)NYX|(?i)L'Oreal|(?i)Maybelline"""</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of columns to select as independent variables</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>independent_vars <span class="op">=</span> [</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_top_100_creator"</span>, <span class="st">"text_length"</span>, <span class="st">"title_length"</span>, <span class="st">"archived"</span>, <span class="st">"is_peak_hour"</span>, <span class="st">"gilded"</span>, <span class="st">"hidden"</span>, <span class="st">"hide_score"</span>, <span class="st">"is_crosspostable"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_reddit_media_domain"</span>, <span class="st">"is_self"</span>, <span class="st">"is_video"</span>, <span class="st">"num_crossposts"</span>, <span class="st">"over_18"</span>, <span class="st">"has_media"</span>, <span class="st">"pinned"</span>, <span class="st">"score"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spoiler"</span>, <span class="st">"stickied"</span>, <span class="st">"is_long_text"</span>, <span class="st">"skincare"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"skincare_product"</span>, <span class="st">"skincare_product_brand"</span>, <span class="st">"makeup"</span>, <span class="st">"makeup_product"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"makeup_product_brand"</span>,<span class="st">"num_comments"</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the independent variables from the DataFrame</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>selected_df <span class="op">=</span> submissions_var.select(independent_vars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.feature <span class="im">import</span> VectorAssembler</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.regression <span class="im">import</span> GBTRegressor</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.evaluation <span class="im">import</span> RegressionEvaluator</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> selected_df.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> [<span class="st">'num_comments'</span>]]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assemble features into a single vector column</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>assembler <span class="op">=</span> VectorAssembler(inputCols<span class="op">=</span>feature_columns, outputCol<span class="op">=</span><span class="st">"features"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into training and test sets</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>train_data, test_data <span class="op">=</span> selected_df.randomSplit([<span class="fl">0.8</span>, <span class="fl">0.2</span>], seed<span class="op">=</span><span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>feature_columns <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> selected_df.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> [<span class="st">'num_comments'</span>]]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assemble features into a single vector column</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>assembler <span class="op">=</span> VectorAssembler(inputCols<span class="op">=</span>feature_columns, outputCol<span class="op">=</span><span class="st">"features"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a Gradient Boosted Tree Regressor model</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>gbt <span class="op">=</span> GBTRegressor(featuresCol<span class="op">=</span><span class="st">"features"</span>, labelCol<span class="op">=</span><span class="st">"num_comments"</span>, seed<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Pipeline</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, gbt])</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> pipeline.fit(train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                </code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the test data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> model.transform(test_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.spark.util.SizeEstimator$ (file:/opt/conda/lib/python3.10/site-packages/pyspark/jars/spark-core_2.12-3.4.0.jar) to field java.nio.charset.Charset.name
+WARNING: Please consider reporting this to the maintainers of org.apache.spark.util.SizeEstimator$
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model using RMSE</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>rmse_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"rmse"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>gbt_rmse <span class="op">=</span> rmse_evaluator.evaluate(predictions)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"RMSE: </span><span class="sc">{</span>gbt_rmse<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model using R2</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>r2_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"r2"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>gbt_r2 <span class="op">=</span> r2_evaluator.evaluate(predictions)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R2: </span><span class="sc">{</span>gbt_r2<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model using MAE</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>mae_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"mae"</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>gbt_mae <span class="op">=</span> mae_evaluator.evaluate(predictions)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"MAE: </span><span class="sc">{</span>gbt_mae<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>                                                                                                                                                                [Stage 371:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>RMSE: 39.32078949645276
+R2: 0.35420199863450674
+MAE: 7.42157799161808</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.regression <span class="im">import</span> LinearRegression</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a Linear Regression model</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression(featuresCol<span class="op">=</span><span class="st">"features"</span>, labelCol<span class="op">=</span><span class="st">"num_comments"</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Pipeline</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>lr_pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, lr])</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>lr_model <span class="op">=</span> lr_pipeline.fit(train_data)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>lr_predictions <span class="op">=</span> lr_model.transform(test_data)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>lr_rmse <span class="op">=</span> rmse_evaluator.evaluate(lr_predictions)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>lr_r2 <span class="op">=</span> r2_evaluator.evaluate(lr_predictions)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>lr_mae <span class="op">=</span> mae_evaluator.evaluate(lr_predictions)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Linear Regression - RMSE: </span><span class="sc">{</span>lr_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>lr_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>lr_mae<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>23/12/05 21:37:30 WARN Instrumentation: [4b9d6b10] regParam is zero, which might cause numerical instability and overfitting.
+23/12/05 21:39:54 WARN InstanceBuilder: Failed to load implementation from:dev.ludovic.netlib.lapack.JNILAPACK
+23/12/05 21:39:54 WARN Instrumentation: [4b9d6b10] Cholesky solver failed due to singular covariance matrix. Retrying with Quasi-Newton solver.
+[Stage 239:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear Regression - RMSE: 98.10275621467068, R2: 0.2937501602353928, MAE: 8.502292652599</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.regression <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a Random Forest Regressor model with specific parameters</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(featuresCol<span class="op">=</span><span class="st">"features"</span>,labelCol<span class="op">=</span><span class="st">"num_comments"</span>,seed<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Pipeline</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>rf_pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, rf])</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>rf_model <span class="op">=</span> rf_pipeline.fit(train_data)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>rf_predictions <span class="op">=</span> rf_model.transform(test_data)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>rmse_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"rmse"</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>r2_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"r2"</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>mae_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"mae"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>rf_rmse <span class="op">=</span> rmse_evaluator.evaluate(rf_predictions)</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>rf_r2 <span class="op">=</span> r2_evaluator.evaluate(rf_predictions)</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>rf_mae <span class="op">=</span> mae_evaluator.evaluate(rf_predictions)</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Random Forest - RMSE: </span><span class="sc">{</span>rf_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>rf_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>rf_mae<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 365:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest - RMSE: 36.37996771881387, R2: 0.3972837164739184, MAE: 7.12384739487361</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.regression <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a Random Forest Regressor model with specific parameters</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(featuresCol<span class="op">=</span><span class="st">"features"</span>,labelCol<span class="op">=</span><span class="st">"num_comments"</span>,seed<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Pipeline</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>rf_pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, rf])</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>rf_model <span class="op">=</span> rf_pipeline.fit(train_data)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>rf_predictions <span class="op">=</span> rf_model.transform(test_data)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>rmse_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"rmse"</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>r2_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"r2"</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>mae_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"mae"</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>rf_rmse <span class="op">=</span> rmse_evaluator.evaluate(rf_predictions)</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>rf_r2 <span class="op">=</span> r2_evaluator.evaluate(rf_predictions)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>rf_mae <span class="op">=</span> mae_evaluator.evaluate(rf_predictions)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Random Forest - RMSE: </span><span class="sc">{</span>rf_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>rf_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>rf_mae<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 259:=====================================================&gt; (95 + 2) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest - RMSE: 112.11912418948454, R2: 0.07752344488483764, MAE: 7.90874190808564</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generalized Linear Regression</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml.regression <span class="im">import</span> GeneralizedLinearRegression</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>glr <span class="op">=</span> GeneralizedLinearRegression(featuresCol<span class="op">=</span><span class="st">"features"</span>, labelCol<span class="op">=</span><span class="st">"num_comments"</span>, family<span class="op">=</span><span class="st">"gaussian"</span>, link<span class="op">=</span><span class="st">"identity"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>glr_pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, glr])</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>glr_model <span class="op">=</span> glr_pipeline.fit(train_data)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>glr_predictions <span class="op">=</span> glr_model.transform(test_data)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>glr_rmse <span class="op">=</span> rmse_evaluator.evaluate(glr_predictions)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>glr_r2 <span class="op">=</span> r2_evaluator.evaluate(glr_predictions)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>glr_mae <span class="op">=</span> mae_evaluator.evaluate(glr_predictions)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Generalized Linear Regression - RMSE: </span><span class="sc">{</span>glr_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>glr_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>glr_mae<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>23/12/05 22:11:23 WARN Instrumentation: [9dbadc78] regParam is zero, which might cause numerical instability and overfitting.
+23/12/05 22:14:06 WARN Instrumentation: [9dbadc78] Cholesky solver failed due to singular covariance matrix. Retrying with Quasi-Newton solver.
+[Stage 267:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized Linear Regression - RMSE: 98.10275621467068, R2: 0.2937501602353929, MAE: 8.502292652599001</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Elastic Net Regression</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>elastic_net <span class="op">=</span> LinearRegression(featuresCol<span class="op">=</span><span class="st">"features"</span>, labelCol<span class="op">=</span><span class="st">"num_comments"</span>, elasticNetParam<span class="op">=</span><span class="fl">0.8</span>, regParam<span class="op">=</span><span class="fl">0.1</span>, maxIter<span class="op">=</span><span class="dv">10</span>, fitIntercept<span class="op">=</span><span class="va">True</span>, standardization<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>elastic_net_pipeline <span class="op">=</span> Pipeline(stages<span class="op">=</span>[assembler, elastic_net])</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>elastic_net_model <span class="op">=</span> elastic_net_pipeline.fit(train_data)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>elastic_net_predictions <span class="op">=</span> elastic_net_model.transform(test_data)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the model</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>en_rmse <span class="op">=</span> rmse_evaluator.evaluate(elastic_net_predictions)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>en_r2 <span class="op">=</span> r2_evaluator.evaluate(elastic_net_predictions)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>en_mae <span class="op">=</span> mae_evaluator.evaluate(elastic_net_predictions)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Elastic Net Regression - RMSE: </span><span class="sc">{</span>en_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>en_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>en_mae<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 277:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Elastic Net Regression - RMSE: 98.17368304307564, R2: 0.29272857488884796, MAE: 8.447160226085387</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>metrics_data <span class="op">=</span> {</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Model"</span>: [<span class="st">"Generalized Linear Regression"</span>, <span class="st">"Elastic Net Regression"</span>,<span class="st">"Random Forest"</span>, <span class="st">"Gradient Boosted Tree Regressor"</span>,<span class="st">"Linear Regression"</span>],</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RMSE"</span>: [glr_rmse, en_rmse,rf_rmse, gbt_rmse,lr_rmse],</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"R2"</span>: [glr_r2,en_r2,rf_r2, gbt_r2,lr_r2],</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"MAE"</span>: [glr_mae, en_mae,rf_mae, gbt_mae,lr_mae]</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the metrics data into a Pandas DataFrame</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>metrics_df <span class="op">=</span> pd.DataFrame(metrics_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Plotly table</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>[go.Table(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="bu">dict</span>(values<span class="op">=</span><span class="bu">list</span>(metrics_df.columns),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>                fill_color<span class="op">=</span><span class="st">'paleturquoise'</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>                align<span class="op">=</span><span class="st">'left'</span>),</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    cells<span class="op">=</span><span class="bu">dict</span>(values<span class="op">=</span>[metrics_df.Model, metrics_df.RMSE, metrics_df.R2, metrics_df.MAE],</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>               fill<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span>[<span class="st">'lavender'</span>,  <span class="co"># Cells color for Model column</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                               [<span class="st">'yellow'</span> <span class="cf">if</span> val <span class="op">==</span> <span class="bu">min</span>(metrics_df.RMSE) <span class="cf">else</span> <span class="st">'lavender'</span> <span class="cf">for</span> val <span class="kw">in</span> metrics_df.RMSE],</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                               [<span class="st">'yellow'</span> <span class="cf">if</span> val <span class="op">==</span> <span class="bu">max</span>(metrics_df.R2) <span class="cf">else</span> <span class="st">'lavender'</span> <span class="cf">for</span> val <span class="kw">in</span> metrics_df.R2],</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>                               [<span class="st">'yellow'</span> <span class="cf">if</span> val <span class="op">==</span> <span class="bu">min</span>(metrics_df.MAE) <span class="cf">else</span> <span class="st">'lavender'</span> <span class="cf">for</span> val <span class="kw">in</span> metrics_df.MAE]]),</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>               align<span class="op">=</span><span class="st">'left'</span>))</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>fig.update_layout(title_text<span class="op">=</span><span class="st">'Model Evaluation Metrics'</span>)</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the figure</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="81e12164-85b2-4786-b246-741fe7c7d7bd" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("81e12164-85b2-4786-b246-741fe7c7d7bd")) {                    Plotly.newPlot(                        "81e12164-85b2-4786-b246-741fe7c7d7bd",                        [{"cells":{"align":"left","fill":{"color":["lavender",["lavender","lavender","yellow","lavender","lavender"],["lavender","lavender","yellow","lavender","lavender"],["lavender","lavender","yellow","lavender","lavender"]]},"values":[["Generalized Linear Regression","Elastic Net Regression","Random Forest","Gradient Boosted Tree Regressor","Linear Regression"],[98.10275621467068,98.17368304307564,36.37996771881387,39.32078949645276,98.10275621467068],[0.2937501602353929,0.29272857488884796,0.3972837164739184,0.35420199863450674,0.2937501602353928],[8.502292652599001,8.447160226085387,7.12384739487361,7.42157799161808,8.502292652599]]},"header":{"align":"left","fill":{"color":"paleturquoise"},"values":["Model","RMSE","R2","MAE"]},"type":"table"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"title":{"text":"Model Evaluation Metrics"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('81e12164-85b2-4786-b246-741fe7c7d7bd');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fig.write_html(<span class="st">"num_comments_model_metrics.html"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>From a technical standpoint, the Random Forest model exhibits outstanding performance in our model evaluation, achieving the lowest RMSE of approximately 36.38, the highest R2 value of roughly 0.397, and a low MAE near 7.12. This model demonstrates a strong capacity to capture the underlying variability within the data, suggesting a robust fit capable of delineating the complex, non-linear patterns often present in social media user interactions. In comparison, the Gradient Boosted Tree Regressor, while also effective, does not quite match the Random Forest in terms of the R2 metric. The Generalized Linear and Linear Regression models post identical RMSE and R2 values, indicating a potentially oversimplified approach to modeling the intricate data landscape. Elastic Net Regression, with a slight improvement in R2, still falls short of the tree-based methodologies.</p>
+<p>From a business perspective, the superior results of the Random Forest model highlight its reliability for predicting user engagement within the “MakeupAddiction” subreddit. Its high degree of accuracy offers moderators and marketers actionable insights for anticipating engagement patterns, gearing up for trending discussions, and developing resonant content. Although the Gradient Boosted Tree also shows promise, the Random Forest’s nuanced modeling makes it particularly valuable for informing strategic decisions. Conversely, the limited performance of the linear models may not adequately cater to the nuanced and dynamic nature of online social interactions, which could lead to less effective engagement strategies. Harnessing the Random Forest insights could lead to more compelling content creation, strategic planning for user interaction, and overall heightened community activity.</p>
+<div class="cell" data-tags="[]" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the RandomForestRegressor model from the pipeline</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>rf_stage <span class="op">=</span> rf_model.stages[<span class="op">-</span><span class="dv">1</span>]  <span class="co"># The last stage is the RandomForestRegressor</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract feature importances from the RandomForestRegressor model</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>feature_importances <span class="op">=</span> rf_stage.featureImportances.toArray()</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Get feature names from the VectorAssembler</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># which is the VectorAssembler used in the pipeline</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>feature_names <span class="op">=</span> assembler.getInputCols()</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Match feature names with their importance scores</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>feature_importance_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(feature_names, feature_importances))</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort features by importance</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>sorted_features <span class="op">=</span> <span class="bu">sorted</span>(feature_importance_dict.items(), key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plotting</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>sorted_feature_names <span class="op">=</span> [x[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> sorted_features]</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>sorted_importances <span class="op">=</span> [x[<span class="dv">1</span>] <span class="cf">for</span> x <span class="kw">in</span> sorted_features]</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>plt.barh(sorted_feature_names, sorted_importances)</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Importance'</span>)</span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Features'</span>)</span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Feature Importance Plot'</span>)</span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_yaxis()  <span class="co"># Invert y-axis to have the most important feature on top</span></span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="num_comments_predict_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the dictionary to a DataFrame</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>feature_importances_df <span class="op">=</span> pd.DataFrame(<span class="bu">list</span>(feature_importance_dict.items()), columns<span class="op">=</span>[<span class="st">'Feature'</span>, <span class="st">'Importance'</span>])</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>feature_importances_df.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">True</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>top_15_features_df <span class="op">=</span> feature_importances_df.sort_values(<span class="st">'Importance'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">15</span>)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Plotly bar chart for the top 15 features</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.bar(</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    top_15_features_df, </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'Importance'</span>, </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">'Feature'</span>, </span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    orientation<span class="op">=</span><span class="st">'h'</span>,</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">'Top 15 Feature Importance Plot'</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse the y-axis to show the most important feature at the top</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>fig.update_layout(yaxis<span class="op">=</span>{<span class="st">'categoryorder'</span>:<span class="st">'total ascending'</span>})</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust the layout to fit the feature names and enhance readability</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>    margin<span class="op">=</span><span class="bu">dict</span>(l<span class="op">=</span><span class="dv">160</span>),  <span class="co"># Increase left margin to fit longer feature names</span></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">600</span>,  <span class="co"># Adjust height to fit top 15 features</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">900</span>   <span class="co"># Optionally adjust width to your preference</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<div>                            <div id="9165884f-9c77-4815-b0a3-7fe996b20e21" class="plotly-graph-div" style="height:600px; width:900px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("9165884f-9c77-4815-b0a3-7fe996b20e21")) {                    Plotly.newPlot(                        "9165884f-9c77-4815-b0a3-7fe996b20e21",                        [{"alignmentgroup":"True","hovertemplate":"Importance=%{x}<br>Feature=%{y}<extra></extra>","legendgroup":"","marker":{"color":"#636efa","pattern":{"shape":""}},"name":"","offsetgroup":"","orientation":"h","showlegend":false,"textposition":"auto","x":[0.7481210853318615,0.08057575141057262,0.04238256022365151,0.030253166440375612,0.022626901811434508,0.01965042152746097,0.016173799906540505,0.013918324252686637,0.006755806468475243,0.004865333634427033,0.004301260122546338,0.003663876182659289,0.0033729246912224155,0.0016797538147506133,0.0008204318552582269],"xaxis":"x","y":["score","title_length","text_length","num_crossposts","gilded","is_top_100_creator","is_crosspostable","is_long_text","is_self","skincare","over_18","is_peak_hour","is_reddit_media_domain","skincare_product","makeup"],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Importance"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Feature"},"categoryorder":"total ascending"},"legend":{"tracegroupgap":0},"title":{"text":"Top 15 Feature Importance Plot"},"barmode":"relative","margin":{"l":160},"height":600,"width":900},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('9165884f-9c77-4815-b0a3-7fe996b20e21');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>fig.write_html(<span class="st">"num_comments_top15_feature_importance.html"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Fig 3 illustrates the key drivers of user engagement on the “MakeupAddiction” subreddit, informed by a Random Forest machine learning model’s feature importance analysis. The ‘score’ emerges as the most influential factor, underscoring the importance of content that resonates with the community in fostering discussion. The length of the title also proves to be significant, highlighting the impact of a concise and engaging title in capturing user attention.</p>
+<p>The model points to crossposting, the presence of a ‘top creator’, and text length as significant predictors of engagement, suggesting that visibility across communities, creator reputation, and detailed content are valued by the subreddit’s users. Timing (indicated by ‘is_peak_hour’) and content hosting (suggested by ‘is_reddit_media_domain’) are also important, emphasizing when and where content is posted as factors in maximizing user interaction. Moreover, the interest in skincare topics suggests a broader community engagement beyond makeup alone, while preferences for posts with media and narrative (‘is_self’ and ‘is_long_text’) indicate a fondness for visually appealing and story-rich content.</p>
+<p>From a business intuition perspective, this plot reveals the intricate dynamics of user engagement within the “MakeupAddiction” subreddit, showcasing the most influential factors that lead to a submission garnering comments. From it, we can glean actionable suggestions for crafting content that not only captivates the audience but also encourages vibrant discussions.</p>
+<p>Quality is the cornerstone of any successful submission. The ‘score’ of a post, as seen leading our list, is a tangible measure of the community’s response, acting as a direct indicator of the content’s resonance with the audience. Achieving a high score entails crafting posts that are both visually and informatively engaging—high-resolution images, thorough tutorials, and authentic reviews are the kind of content that often sees a positive reception.</p>
+<p>The art of titling is your gateway to capturing immediate interest. A title that succinctly yet vividly encapsulates the essence of your content can make the difference between a fleeting glance and a deep dive into your post. It’s the spark that ignites curiosity and engagement, making it a crucial element in the anatomy of a popular submission.</p>
+<p>Crossposting strategically serves to broaden the reach of your content, inviting new perspectives and discussions from various corners of the Reddit world. It’s a nod to the interconnectedness of communities and interests, which can be a powerful tool in amplifying the voice of your submission. Moreover, becoming a familiar figure in the subreddit through regular, quality contributions can elevate your content’s visibility and the engagement it receives—our plot suggests that being recognized as a top creator has its perks.</p>
+<p>The plot also underscores the importance of content depth. A lengthy, well-articulated post can spark extensive discussions, inviting users to engage with the content and each other. This depth can be achieved through storytelling, comprehensive guides, or detailed personal experiences, which often encourage users to contribute their insights and extend the conversation.</p>
+<p>Understanding the subreddit’s rhythms and posting during peak hours can significantly increase the chances of your content being seen and engaged with. It’s about being present in the community’s space when they are most active and eager for new content. And when it comes to hosting media, remember that content hosted directly on Reddit’s media domain can offer a smoother user experience, leading to better engagement.</p>
+<p>Expanding the content’s focus to include discussions about skincare, in addition to makeup, can also invite a broader spectrum of comments. It’s a recognition of the holistic approach the community often takes towards beauty routines. And while visual content is key in a makeup-centric space, do not underestimate the power of a good story. Narrative-driven ‘self’ posts can resonate deeply with readers, prompting them to engage in a more personal and meaningful way.</p>
+<p>By weaving together these insights—focusing on content quality, mastering the craft of titling, leveraging cross-community interest through strategic crossposting, engaging consistently as a creator, enriching the narrative depth of your posts, timing your content right, and using the platform’s media hosting effectively—you can create posts that are not just seen but talked about. This plot serves as a roadmap to navigating the “MakeupAddiction” subreddit, helping you to foster a submission that has the potential to spark a lively and lasting dialogue.</p>
+<div class="cell" data-tags="[]" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml <span class="im">import</span> PipelineModel</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> <span class="st">"num_comments_rf_model"</span>  </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the model</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>rf_model.write().overwrite().save(model_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.ml <span class="im">import</span> PipelineModel</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Path where the model is saved</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> <span class="st">"num_comments_rf_model"</span>  <span class="co"># Use the same path as before</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the saved model</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>loaded_rf_model <span class="op">=</span> PipelineModel.load(model_path)</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions using the loaded model</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>loaded_rf_predictions <span class="op">=</span> loaded_rf_model.transform(test_data)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate the predictions</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>rmse_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"rmse"</span>)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>r2_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"r2"</span>)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>mae_evaluator <span class="op">=</span> RegressionEvaluator(labelCol<span class="op">=</span><span class="st">"num_comments"</span>, predictionCol<span class="op">=</span><span class="st">"prediction"</span>, metricName<span class="op">=</span><span class="st">"mae"</span>)</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate evaluation metrics</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>loaded_rf_rmse <span class="op">=</span> rmse_evaluator.evaluate(loaded_rf_predictions)</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>loaded_rf_r2 <span class="op">=</span> r2_evaluator.evaluate(loaded_rf_predictions)</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>loaded_rf_mae <span class="op">=</span> mae_evaluator.evaluate(loaded_rf_predictions)</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the evaluation metrics</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Loaded Random Forest Model - RMSE: </span><span class="sc">{</span>loaded_rf_rmse<span class="sc">}</span><span class="ss">, R2: </span><span class="sc">{</span>loaded_rf_r2<span class="sc">}</span><span class="ss">, MAE: </span><span class="sc">{</span>loaded_rf_mae<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[Stage 390:======================================================&gt;(96 + 1) / 97]                                                                                </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loaded Random Forest Model - RMSE: 39.37996771881387, R2: 0.3972837164739184, MAE: 7.12384739487361</code></pre>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

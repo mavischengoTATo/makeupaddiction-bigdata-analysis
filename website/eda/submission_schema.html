@@ -1,0 +1,71 @@
+<table>
+  <tr><th>Field Name</th><th>Data Type</th><th>Nullable</th></tr>
+  <tr><td>adserver_click_url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>adserver_imp_pixel</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>archived</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>author</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>author_cakeday</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>author_flair_css_class</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>author_flair_text</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>author_id</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>brand_safe</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>contest_mode</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>created_utc</td><td>TimestampType()</td><td>True</td></tr>
+  <tr><td>crosspost_parent</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>crosspost_parent_list</td><td>ArrayType(StructType([StructField('approved_at_utc', StringType(), True), StructField('approved_by', StringType(), True), StructField('archived', BooleanType(), True), StructField('author', StringType(), True), StructField('author_flair_css_class', StringType(), True), StructField('author_flair_text', StringType(), True), StructField('banned_at_utc', StringType(), True), StructField('banned_by', StringType(), True), StructField('brand_safe', BooleanType(), True), StructField('can_gild', BooleanType(), True), StructField('can_mod_post', BooleanType(), True), StructField('clicked', BooleanType(), True), StructField('contest_mode', BooleanType(), True), StructField('created', DoubleType(), True), StructField('created_utc', DoubleType(), True), StructField('distinguished', StringType(), True), StructField('domain', StringType(), True), StructField('downs', LongType(), True), StructField('edited', BooleanType(), True), StructField('gilded', LongType(), True), StructField('hidden', BooleanType(), True), StructField('hide_score', BooleanType(), True), StructField('id', StringType(), True), StructField('is_crosspostable', BooleanType(), True), StructField('is_reddit_media_domain', BooleanType(), True), StructField('is_self', BooleanType(), True), StructField('is_video', BooleanType(), True), StructField('likes', StringType(), True), StructField('link_flair_css_class', StringType(), True), StructField('link_flair_text', StringType(), True), StructField('locked', BooleanType(), True), StructField('media', StringType(), True), StructField('mod_reports', ArrayType(StringType(), True), True), StructField('name', StringType(), True), StructField('num_comments', LongType(), True), StructField('num_crossposts', LongType(), True), StructField('num_reports', StringType(), True), StructField('over_18', BooleanType(), True), StructField('parent_whitelist_status', StringType(), True), StructField('permalink', StringType(), True), StructField('pinned', BooleanType(), True), StructField('quarantine', BooleanType(), True), StructField('removal_reason', StringType(), True), StructField('report_reasons', StringType(), True), StructField('saved', BooleanType(), True), StructField('score', LongType(), True), StructField('secure_media', StringType(), True), StructField('selftext', StringType(), True), StructField('selftext_html', StringType(), True), StructField('spoiler', BooleanType(), True), StructField('stickied', BooleanType(), True), StructField('subreddit', StringType(), True), StructField('subreddit_id', StringType(), True), StructField('subreddit_name_prefixed', StringType(), True), StructField('subreddit_type', StringType(), True), StructField('suggested_sort', StringType(), True), StructField('thumbnail', StringType(), True), StructField('thumbnail_height', StringType(), True), StructField('thumbnail_width', StringType(), True), StructField('title', StringType(), True), StructField('ups', LongType(), True), StructField('url', StringType(), True), StructField('user_reports', ArrayType(StringType(), True), True), StructField('view_count', StringType(), True), StructField('visited', BooleanType(), True), StructField('whitelist_status', StringType(), True)]), True)</td><td>True</td></tr>
+  <tr><td>disable_comments</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>distinguished</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>domain</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>domain_override</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>edited</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>embed_type</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>embed_url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>gilded</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>hidden</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>hide_score</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>href_url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>id</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>imp_pixel</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>is_crosspostable</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>is_reddit_media_domain</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>is_self</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>is_video</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>link_flair_css_class</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>link_flair_text</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>locked</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>media</td><td>StructType([StructField('event_id', StringType(), True), StructField('oembed', StructType([StructField('author_name', StringType(), True), StructField('author_url', StringType(), True), StructField('cache_age', LongType(), True), StructField('description', StringType(), True), StructField('height', LongType(), True), StructField('html', StringType(), True), StructField('provider_name', StringType(), True), StructField('provider_url', StringType(), True), StructField('thumbnail_height', LongType(), True), StructField('thumbnail_url', StringType(), True), StructField('thumbnail_width', LongType(), True), StructField('title', StringType(), True), StructField('type', StringType(), True), StructField('url', StringType(), True), StructField('version', StringType(), True), StructField('width', LongType(), True)]), True), StructField('reddit_video', StructType([StructField('dash_url', StringType(), True), StructField('duration', LongType(), True), StructField('fallback_url', StringType(), True), StructField('height', LongType(), True), StructField('hls_url', StringType(), True), StructField('is_gif', BooleanType(), True), StructField('scrubber_media_url', StringType(), True), StructField('transcoding_status', StringType(), True), StructField('width', LongType(), True)]), True), StructField('type', StringType(), True)])</td><td>True</td></tr>
+  <tr><td>media_embed</td><td>StructType([StructField('content', StringType(), True), StructField('height', LongType(), True), StructField('scrolling', BooleanType(), True), StructField('width', LongType(), True)])</td><td>True</td></tr>
+  <tr><td>mobile_ad_url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>num_comments</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>num_crossposts</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>original_link</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>over_18</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>parent_whitelist_status</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>permalink</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>pinned</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>post_hint</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>preview</td><td>StructType([StructField('enabled', BooleanType(), True), StructField('images', ArrayType(StructType([StructField('id', StringType(), True), StructField('resolutions', ArrayType(StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), True), StructField('source', StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), StructField('variants', StructType([StructField('gif', StructType([StructField('resolutions', ArrayType(StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), True), StructField('source', StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True)]), True), StructField('mp4', StructType([StructField('resolutions', ArrayType(StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), True), StructField('source', StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True)]), True), StructField('nsfw', StructType([StructField('resolutions', ArrayType(StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), True), StructField('source', StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True)]), True), StructField('obfuscated', StructType([StructField('resolutions', ArrayType(StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True), True), StructField('source', StructType([StructField('height', LongType(), True), StructField('url', StringType(), True), StructField('width', LongType(), True)]), True)]), True)]), True)]), True), True)])</td><td>True</td></tr>
+  <tr><td>promoted</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>promoted_by</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>promoted_display_name</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>promoted_url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>retrieved_on</td><td>TimestampType()</td><td>True</td></tr>
+  <tr><td>score</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>secure_media</td><td>StructType([StructField('event_id', StringType(), True), StructField('oembed', StructType([StructField('author_name', StringType(), True), StructField('author_url', StringType(), True), StructField('cache_age', LongType(), True), StructField('description', StringType(), True), StructField('height', LongType(), True), StructField('html', StringType(), True), StructField('provider_name', StringType(), True), StructField('provider_url', StringType(), True), StructField('thumbnail_height', LongType(), True), StructField('thumbnail_url', StringType(), True), StructField('thumbnail_width', LongType(), True), StructField('title', StringType(), True), StructField('type', StringType(), True), StructField('url', StringType(), True), StructField('version', StringType(), True), StructField('width', LongType(), True)]), True), StructField('type', StringType(), True)])</td><td>True</td></tr>
+  <tr><td>secure_media_embed</td><td>StructType([StructField('content', StringType(), True), StructField('height', LongType(), True), StructField('media_domain_url', StringType(), True), StructField('scrolling', BooleanType(), True), StructField('width', LongType(), True)])</td><td>True</td></tr>
+  <tr><td>selftext</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>spoiler</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>stickied</td><td>BooleanType()</td><td>True</td></tr>
+  <tr><td>subreddit</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>subreddit_id</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>suggested_sort</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>third_party_trackers</td><td>ArrayType(StringType(), True)</td><td>True</td></tr>
+  <tr><td>third_party_tracking</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>third_party_tracking_2</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>thumbnail</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>thumbnail_height</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>thumbnail_width</td><td>LongType()</td><td>True</td></tr>
+  <tr><td>title</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>url</td><td>StringType()</td><td>True</td></tr>
+  <tr><td>whitelist_status</td><td>StringType()</td><td>True</td></tr>
+</table>

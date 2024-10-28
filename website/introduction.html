@@ -1,0 +1,633 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Introduction</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1>Introduction</h1>
+					</header>
+				<!-- Nav -->
+				<nav id="nav">
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="#background" class="active">Background</a></li>
+						<li><a href="#dataset" class="active">Dataset Selection</a></li>
+						<li><a href="#interestingvar" class="active">Interesting Variables</a></li>
+
+						<li><a href="#topic"class="active">11 Data Science Topics</a></li>
+
+					</ul>
+				</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Content -->
+							<section id="content" class="main">
+
+								<!-- Text -->
+								<section id="background" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>Background</b></h2>
+										<span class="logo" style="margin-left: 500px;">
+												<img src="images/bg.png" alt="" style="border-radius: 50%;width: 300px; height: 300px; object-fit: cover;" />
+											</a>
+										</span>
+									</div>
+										<h4><b>Why We Chose the MakeupAddiction Subreddit for Exciting Data Exploration? </b></h4>
+										<p>The MakeupAddiction subreddit is an ideal platform for data exploration due to its rich content and active beauty community. This vibrant online space is filled with discussions on makeup, skincare, and self-care, where enthusiasts share their experiences and opinions. The high level of engagement, evident in the volume of comments, offers a window into the topics that captivate this audience, allowing for a deeper understanding of popular content.
+
+											<br><br>Key aspects of our exploration include analyzing brand mentions to identify which beauty brands dominate discussions, tracking emerging trends and product preferences to stay abreast of the beauty market's evolution, and examining emotional responses in comments for insights into user sentiments and community interactions. This comprehensive approach positions the MakeupAddiction subreddit as not just a source of data but a gateway to understanding the dynamics and passions driving the beauty community, ensuring our strategies align with the latest trends and consumer preferences.</p>
+										<hr />
+								</section>
+								<section id="dataset" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>Dataset Selection</b></h2>
+										<span class="logo" style="margin-left: 500px;">
+											<a href="https://www.reddit.com/r/MakeupAddiction/" target="_blank">
+												<img src="images/datasele.png" alt="" style="width: 200px; height: 200px; object-fit: cover;" />
+											</a>
+										</span>
+									</div>
+									
+									<p>In our exploration of the MakeupAddiction subreddit, we focused on understanding the vibrant and ever-changing world of beauty and makeup as discussed by its enthusiastic community. The project spans the years 2021 to 2023, a period chosen for its reflection of the most current trends and discussions in the beauty industry. Reddit, known for its lively and quick-paced exchange of ideas, offers a rich tapestry of opinions, tips, and trends shared by makeup enthusiasts, making it a treasure trove for anyone interested in the pulse of the beauty world.
+
+										<br><br>Our aim was to delve deep into this active online community to uncover what excites, motivates, and engages its members. From discussions about the latest makeup products to advice on skincare routines, the MakeupAddiction subreddit is a dynamic platform where new ideas and trends emerge constantly. By examining over one million comments and a hundred thousand posts, our project seeks to draw a comprehensive picture of the beauty landscape as shaped by real users' conversations and interactions. This approach provides us with a unique opportunity to understand not just what products or trends are popular, but also why they resonate with the community, offering invaluable insights for brands, content creators, and beauty enthusiasts alike.</p>
+										<p>The description of the variables relevant to our study can be found in the accompanying table. While we won't be analyzing every variable, our focus will be on data that is both prevalent and significant across the posts. This approach involves prioritizing data that offers the most insight and is representative of the community's discussions. Variables with a high number of missing values will be excluded from our analysis to ensure the accuracy and relevance of our findings. This strategy allows us to concentrate on the most meaningful and informative aspects of the data, ensuring a comprehensive understanding of the trends and topics that resonate within the MakeupAddiction subreddit.</p>
+										<section id="submission" class="main">
+										<h3><b>Original Submission Dataset</b></h3>
+										<div class="table-wrapper">
+											<table>
+												<thead>
+													<tr>
+														<th>Variable</th>
+														<th>Description</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>adserver_click_url</td>
+														<td>String - URL for ad click.</td>
+													</tr>
+													<tr>
+														<td>adserver_imp_pixel</td>
+														<td>String - Pixel tracking link for ad display.</td>
+													</tr>
+													<tr>
+														<td>archived</td>
+														<td> Boolean - Indicates if the post is archived.</td>
+													
+													</tr>
+													<tr>
+														<td>author</td>
+														<td>String - Author of the post.</td>
+													</tr>
+													<tr>
+														<td>author_cakeday</td>
+														<td>Boolean - Reddit “cakeday” status of the author, typically used to celebrate registration anniversaries.</td>
+													</tr>
+													<tr>
+														<td>author_flair_css_class</td>
+														<td>String - CSS class for author’s flair.</td>
+													</tr>
+													<tr>
+														<td>author_flair_text</td>
+														<td>String - Textual flair for the author.</td>
+													</tr>
+													<tr>
+														<td>author_id</td>
+														<td> String - Identifier for the author.</td>
+													
+													</tr>
+													<tr>
+														<td>brand_safe</td>
+														<td>Boolean - Indicates whether the post content is brand-safe.</td>
+													</tr>
+													<tr>
+														<td>contest_mode</td>
+														<td>Boolean - Indicates if the post is in contest mode.</td>
+													</tr>
+													<tr>
+														<td>created_utc</td>
+														<td>Integer - Creation time of the post (in UTC timestamp).</td>
+													</tr>
+													<tr>
+														<td>crosspost_parent</td>
+														<td>Object - Contains information about the parent post if the post is a crosspost.</td>
+													</tr>
+													<tr>
+														<td>crosspost_parent_list</td>
+														<td>List - List of parent posts for crossposts.</td>
+													
+													</tr>
+													<tr>
+														<td>disable_comments</td>
+														<td>Boolean - Indicates if comments are disabled.</td>
+													</tr>
+													<tr>
+														<td>distinguished</td>
+														<td>String - Indicates if the post was submitted by a specific user or an administrator.</td>
+													</tr>
+													<tr>
+														<td>domain</td>
+														<td>String - Domain of the post link.</td>
+													</tr>
+													<tr>
+														<td>domain_override</td>
+														<td>String - Override setting for the domain.</td>
+													</tr>
+													<tr>
+														<td>edited</td>
+														<td>Boolean - Indicates if the post has been edited.</td>
+													</tr>
+													<tr>
+														<td>embed_type</td>
+														<td>String - Type of embedded content.</td>
+													</tr>
+													<tr>
+														<td>embed_url</td>
+														<td>String - URL for embedded content.</td>
+													</tr>
+													<tr>
+														<td>gilded</td>
+														<td>Integer - Number of times the post has been awarded Reddit Gold.</td>
+													</tr>
+													<tr>
+														<td>hidden</td>
+														<td>Boolean - Indicates if the post is hidden.</td>
+													</tr>
+													<tr>
+														<td>hide_score</td>
+														<td>Boolean - Indicates whether the post score is hidden.</td>
+													</tr>
+													<tr>
+														<td>href_url</td>
+														<td>String - URL of the post link.</td>
+													</tr>
+													<tr>
+														<td>id</td>
+														<td>String - Unique identifier of the post.</td>
+													</tr>
+													<tr>
+														<td>imp_pixel</td>
+														<td>String - Pixel tracking link for ad display.</td>
+													</tr>
+													<tr>
+														<td>is_crosspostable</td>
+														<td>Boolean - Indicates if the post can be crossposted.</td>
+													</tr>
+													<tr>
+														<td>is_reddit_media_domain</td>
+														<td>Boolean - Indicates if the link is from a Reddit media domain.</td>
+													</tr>
+													<tr>
+														<td>is_self</td>
+														<td>Boolean - Indicates if the post is a self-post.</td>
+													</tr>
+													<tr>
+														<td>is_video</td>
+														<td>Boolean - Indicates if the post contains video content.</td>
+													</tr>
+													<tr>
+														<td>link_flair_css_class</td>
+														<td>String - CSS class for link flair.</td>
+													</tr>
+													<tr>
+														<td>link_flair_text</td>
+														<td>String - Text for link flair.</td>
+													</tr>
+													<tr>
+														<td>locked</td>
+														<td>Boolean - Indicates if the post is locked.</td>
+													</tr>
+													<tr>
+														<td>media</td>
+														<td>Object - Media information for the post.</td>
+													</tr>
+													<tr>
+														<td>media_embed</td>
+														<td>Object - Embedded media information.</td>
+													</tr>
+													<tr>
+														<td>mobile_ad_url</td>
+														<td>String - URL for mobile ad.</td>
+													</tr>
+													<tr>
+														<td>num_comments</td>
+														<td>Integer - Number of comments on the post.</td>
+													</tr>
+													<tr>
+														<td>num_crossposts</td>
+														<td>Integer - Number of times the post has been crossposted.</td>
+													</tr>
+													<tr>
+														<td>original_link</td>
+														<td>String - Original link.</td>
+													</tr>
+													<tr>
+														<td>over_18</td>
+														<td>Boolean - Indicates whether the post content is suitable for users aged 18 and older.</td>
+													</tr>
+													
+												</tbody>
+												<tfoot>
+													<tr>
+														<td colspan="1"></td>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+
+									</section>
+
+
+								<!-- Table -->
+								<section id="comment" class="main">
+										<h3><b>Original Comments Dataset</b></h3>
+<div class="table-wrapper">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>The comment’s identifier, e.g., “dbumnq8” (String).</td>
+            </tr>
+            <tr>
+                <td>author</td>
+                <td>The account name of the poster, e.g., “example username” (String).</td>
+            </tr>
+            <tr>
+                <td>link id</td>
+                <td>Identifier of the submission that this comment is in, e.g., “t3 5l954r” (String).</td>
+            </tr>
+            <tr>
+                <td>parent id</td>
+                <td>Identifier of the parent of this comment, might be the identifier of the submission if it is a top-level comment or the identifier of another comment, e.g., “t1 dbu5bpp” (String).</td>
+            </tr>
+            <tr>
+                <td>created utc</td>
+                <td>UNIX timestamp that refers to the time of the submission’s creation, e.g., 1483228803 (Integer).</td>
+            </tr>
+            <tr>
+                <td>subreddit</td>
+                <td>Name of the subreddit that the comment is posted. Note that it excludes the prefix /r/. E.g., ’AskReddit’ (String).</td>
+            </tr>
+            <tr>
+                <td>subreddit id</td>
+                <td>The identifier of the subreddit where the comment is posted, e.g., “t5 2qh1i” (String).</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>The comment’s text, e.g., “This is an example comment” (String).</td>
+            </tr>
+            <tr>
+                <td>score</td>
+                <td>The score of the comment. The score is the number of upvotes minus the number of downvotes. Note that Reddit fuzzes the real score to prevent spam bots. E.g., 5 (Integer).</td>
+            </tr>
+            <tr>
+                <td>distinguished</td>
+                <td>Flag to determine whether the comment is made by the moderators or admins. “null” means not distinguished (String).</td>
+            </tr>
+            <tr>
+                <td>edited</td>
+                <td>Flag indicating if the comment has been edited. Either the UNIX timestamp that the comment was edited at, or “false”.</td>
+            </tr>
+            <tr>
+                <td>stickied</td>
+                <td>Flag indicating whether the submission is set as sticky in the subreddit, e.g., false (Boolean).</td>
+            </tr>
+            <tr>
+                <td>retrieved on</td>
+                <td>UNIX timestamp that refers to the time that we crawled the comment, e.g., 1483228803 (Integer).</td>
+            </tr>
+            <tr>
+                <td>gilded</td>
+                <td>The number of times this comment received Reddit gold, e.g., 0 (Integer).</td>
+            </tr>
+            <tr>
+                <td>controversiality</td>
+                <td>Number that indicates whether the comment is controversial, e.g., 0 (Integer).</td>
+            </tr>
+            <tr>
+                <td>author flair css class</td>
+                <td>The CSS class of the author’s flair. This field is specific to subreddit (String).</td>
+            </tr>
+            <tr>
+                <td>author flair text</td>
+                <td>The text of the author’s flair. This field is specific to subreddit (String).</td>
+            </tr>
+        	</tbody>
+    								</table>
+									</div>
+									</section>
+									<hr />
+
+
+
+									
+									<section id="interestingvar" class="main">
+									<h2><b>Interesting Variables For EDA Analysis</b></h2>
+									<li><b>Inclusion of Content Categorization Dummy Variables</b></li>
+									<p>We included the dummy variables “Skincare,” “Bodycare,” and “Makeup” to categorize and analyze specific content areas within the “MakeupAddiction” subreddit. These variables allow us to differentiate posts related to skincare, body care, and makeup, enabling focused analysis of user preferences, engagement levels, and trends within each of these beauty-related topics. This segmentation enhances our ability to conduct targeted analyses, identify prevalent content categories, and uncover unique patterns, ultimately contributing to a more comprehensive EDA of the subreddit.</p>
+									<li><b>Introduction of New Variables</b></li>
+									<p>The creation of the new variables “is_top_100_creator,” “is_peak_hours,” and “is_long_text” enriches our analysis of the subreddit. “is_top_100_creator” identifies influential users, aiding our study of their impact on the community. “is_peak_hours” helps us determine optimal posting times and provides insights into community activity patterns. “is_long_text” allows us to differentiate lengthy textual content, facilitating in-depth textual analysis. These variables offer a nuanced understanding of user behavior, content dynamics, and community engagement, enhancing the depth and comprehensiveness of our analysis.	</p>
+
+									<li><b>Expansion to Product and Brand Analysis (Dummy Variables)</b></li>
+									<p>In addition, we introduced dummy variables such as “skincare_product,” “skincare_product_brand,” “makeup_product,” and “makeup_product_brand.” These variables allow us to explore specific products within the skincare, makeup, and body care categories. Furthermore, they enable us to identify the brands associated with these products. This structured approach enhances the granularity of our analysis, enabling us to uncover patterns and preferences related to specific products and brands within each beauty category, providing a more detailed and insightful perspective on the “MakeupAddiction”</p>
+									</section>
+									<section id="external" class="main">
+									<li><b>Add External New Variables</b></li>
+									<p>In our analysis of the MakeupAddiction subreddit, we've incorporated "posting_karma" as a new variable to gauge the influence and engagement of users. This metric reflects a Reddit user's community contributions, offering insights into their reputation and the reception of their content. Higher Karma scores, indicative of greater influence and credibility, are particularly valuable for identifying influential users for potential collaborations. This addition aids in understanding the correlation between a user's Karma and the popularity of their posts, enhancing our ability to devise effective content strategies and deepen our understanding of user dynamics within the community.</p>
+								</section>
+									<section id="summary" class="main">
+									<h3><b>EDA Variables Summary</b></h3>
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Data Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>created_time (submission)</td>
+                <td>Creation time of the post (in UTC timestamp)</td>
+                <td>Integer</td>
+            </tr>
+            <tr>
+                <td>score (submission)</td>
+                <td>Score of the submission (upvotes minus downvotes)</td>
+                <td>Integer</td>
+            </tr>
+            <tr>
+                <td>over_18 (submission)</td>
+                <td>Indicates if the content is for users aged 18 and older</td>
+                <td>Boolean</td>
+            </tr>
+            <tr>
+                <td>num_comments (submission)</td>
+                <td>Number of comments on the submission</td>
+                <td>Integer</td>
+            </tr>
+            <tr>
+                <td>subreddit (submission)</td>
+                <td>Name of the subreddit where the submission is posted</td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>author (submission)</td>
+                <td>Username or author’s name of the submission</td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>title (submission)</td>
+                <td>Title of the submission</td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>link_flair_text (submission)</td>
+                <td>Textual information related to link flair for the submission</td>
+                <td>String</td>
+            </tr>
+            <tr>
+                <td>crosspost_parent_list (submission)</td>
+                <td>List of parent posts for crossposts</td>
+                <td>List</td>
+            </tr>
+            <tr>
+                <td>controversiality (submission)</td>
+                <td>Level of controversy surrounding the submission</td>
+                <td>Integer</td>
+            </tr>
+            <tr>
+                <td>gilded (comments)</td>
+                <td>Number of Reddit Gold awards received by a comment</td>
+                <td>Integer</td>
+            </tr>
+			
+            <tr>
+				<td>score (comments)</td>
+				<td>Score of a comment (upvotes minus downvotes)</td>
+				<td>Integer</td>
+			</tr>
+			<tr>
+				<td>is_video (submission)</td>
+				<td>Indicates if the submission contains video content</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>media (submission)</td>
+				<td>Information about media content associated with the submission</td>
+				<td>Object</td>
+			</tr>
+			<tr>
+				<td>media_embed (submission)</td>
+				<td>Embedded media information related to the submission</td>
+				<td>Object</td>
+			</tr>
+			<tr>
+				<td>Skincare (dummy variable)</td>
+				<td>Presence or absence of “Skincare” category or attribute</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>bodycare (dummy variable)</td>
+				<td>Presence or absence of “Bodycare” category or attribute</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>Makeup (dummy Variable)</td>
+				<td>Presence or absence of “Makeup” category or attribute</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>skincare_product (dummy variable)</td>
+				<td>Presence or absence of a skincare product</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>skincare_product_brand (dummy variable)</td>
+				<td>Presence or absence of a skincare product brand</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>makeup_product (dummy variable)</td>
+				<td>Presence or absence of a makeup product</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>makeup_product_brand (dummy variable)</td>
+				<td>Presence or absence of a makeup product brand</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>is_top_100_creator (New Variable)</td>
+				<td>Identification of top 100 creators</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>is_peak_hours (New Variable)</td>
+				<td>Presence during peak hours or high activity times</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>is_long_text (New Variable)</td>
+				<td>Signifies whether text content is considered long or extensive</td>
+				<td>Boolean</td>
+			</tr>
+			<tr>
+				<td>posting_karma (New Variable)</td>
+				<td>Posting karma of the author of the submission</td>
+				<td>Integer</td>
+			</tr>
+			
+        </tbody>
+    </table>
+</div>
+</section>
+
+<hr />
+<section id="topic" class="main">
+								<h2><b>11 Data Science Topics</b></h2>
+								<h3>Exploratory</h3>
+								<h4><b>Cultivating Optimal Posting Strategies: Unveiling Makeup Trends on ‘MakeupAddiction’ for Influencers and Brands</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Our aim is to ascertain the most effective posting times for influencers and brands on the MakeupAddiction subreddit. This entails pinpointing peak hours and discerning the influence of seasonality, festivals, and holidays on makeup-related content, guiding them to maximize their online presence and audience engagement.</p>
+	<li>Technical Proposals:</li>
+<p>In our study covering 2021 to 2023, we will meticulously analyze the subreddit's daily posting patterns. This involves categorizing and counting submissions by the hour, using data from the created_utc column to assess both the volume and average scores of posts. To present these findings, we'll employ a dual-axis time-series plot combining line and bar graphs - the line graph representing hourly post volumes and the bar graph depicting average post scores, with distinct color coding for clarity. Additionally, we will explore yearly trends by examining post dates, allowing us to understand how posting frequency and engagement scores fluctuate over time.</p>
+</ul>
+
+<h4><b>Unveiling Beauty Influencers: Identifying Top 10 Content Creators in the ‘MakeupAddiction’ Subreddit for Strategic Brand Collaborations</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Our objective is to delve into the MakeupAddiction subreddit and uncover the top ten beauty content creators, assessing their influence and potential for brand collaborations and promotional activities. This involves a deep analysis of their reach within the community, evaluating their impact not just in terms of followers but also the extent of engagement they foster.</p>
+	<li>Technical Proposal:</li>
+	<p>To achieve this, we will methodically filter and organize the data by author, employing a sophisticated weighted scoring system to evaluate both the popularity and the frequency of their contributions. This system will consider key factors like post scores and the number of comments, as well as the sheer volume of posts each creator has made. Our analysis will span three years—2021, 2022, and 2023—to capture a comprehensive view of their evolving influence over time. The resulting summary won’t just list these top creators; it will offer a detailed exploration of their digital footprint within the subreddit, highlighting how their content resonates with and shapes the community.</p>
+</ul>
+
+<h4><b>Visual Impact: Analyzing the Influence of Visual Content on User Engagement in the ‘MakeupAddiction’ Subreddit (2021-2023)</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Our project delves into the MakeupAddiction subreddit, focusing from 2021 to 2023, to determine the real impact of visual elements on user engagement and popularity. The objective is to discern whether visuals like gifs, videos, and images significantly boost interaction and attention within the beauty community. This insight is vital for influencers and brands, as it guides them in developing content strategies that resonate more effectively with their audience, aligning with the evolving trends and preferences in the digital beauty space.</p>
+	<li>Technical Proposal:</li>
+<p>In our detailed analysis, employing methods like t-tests and boxplot visualization, we discovered that visual content does not always guarantee higher engagement, as posts with visual elements often showed lower interaction compared to text-based posts. This revelation challenges the prevalent notion of visuals being universally more engaging, indicating a more complex interaction between media content and user response on the subreddit. </p>
+</ul>
+
+<h4><b>Analyzing User Engagement and Behavior: Uncovering Demographic Differences in the MakeupAddiction Subreddit (2021-2023)</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Our main objective is to thoroughly analyze the MakeupAddiction subreddit data, focusing on the 'Over_18' indicator to understand the differences in engagement and comments between adult and minor users. This analysis aims to uncover distinct behavior patterns and preferences of these demographics, providing valuable insights for businesses, advertisers, and subreddit moderators. This information will help in tailoring content and strategies more effectively to each audience segment, thus improving engagement and interaction within the community.</p>
+	<li>Technical Proposal:</li>
+	<p>In our analysis of the MakeupAddiction subreddit from 2021 to 2023, we are specifically focusing on distinguishing the engagement patterns of adult and minor users by comparing their comments and scores. To do this, we're employing t-tests and Mann-Whitney U Tests to statistically analyze the differences in their interactions. These tests will help us understand the variances in user behavior and preferences between these two demographic segments, offering deeper insights into the community dynamics of the subreddit.</p>
+</ul>
+								<h3>NLP</h3>
+								<h4><b>Evaluating Influencers’ Emotional Impact: Sentiment Analysis of Comments on the Top 10 Creators’ Submissions in the MakeupAddiction Subreddit</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Following the exploratory task of identifying the top 10 creators, we move on to assess the sentiment of comments in their submissions to gauge the overall emotional tone of Reddit users towards these influencers. This will provide further and more scientific insights into the influencers’ impact on their audience.</p>
+    <li>Technical Proposal:</li>
+    <p>Utilize NLP libraries like NLTK, and preprocess the text data, including tokenization, removing stop words, and lemmatization. Apply sentiment analysis to the preprocessed comments to determine their emotional tone. Calculate sentiment scores for each comment to quantify the intensity of emotions. Aggregate the sentiment scores of comments for each influencer. Visualize the sentiment analysis results using charts or graphs to provide a clear understanding of influencers’ emotional impact.</p>
+</ul>
+
+<h4><b>Unlocking Positivity: Sentiment Analysis of ‘Hot Tags’ in the MakeupAddiction Subreddit for Enhanced User Engagement and Brand Strategies</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>The objective is to gauge the sentiment and community reception of content within the top 35 tags with the most comments on the “MakeupAddiction” subreddit, identified as “Hot Tags”. Understanding the sentiment distribution, especially the proportion of positive attitudes, will empower creators, moderators, and brands to Adjust their content creation to align with positively received topics, enhancing user engagement and satisfaction. Brands can position their products and messages in a way that resonates positively with the subreddit’s community. Moderators can identify potential areas of contention or exceptionally positive topics, aiding in community management and policy development. Gain insights into current trends and consumer mood, informing marketing strategies and product development.</p>
+    <li>Technical Proposal:</li>
+<p>To meet these objectives, our technical approach involves extracting data from posts associated with the top 35 "Hot Tags" identified through NLP processing. We will utilize NLP tools to conduct sentiment analysis on submission titles, focusing on cleaning and normalizing text data for accurate sentiment categorization using algorithms like VADER or TextBlob. These tools are particularly effective for social media text analysis, enabling us to classify sentiments into positive and negative categories. We'll calculate the proportion of posts showing positive sentiments within each tag, creating a detailed sentiment distribution profile for these key topics.</p>
+</ul>
+
+<h4><b>Elevating Beauty Brands: NLP Analysis of Top Brands and Sentiment in ‘Skincare,’ ‘Makeup,’ on MakeupAddiction (2021-2023)</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>The objective is to leverage NLP techniques to identify the top 10 most discussed brands within the “Skincare,” “Makeup,” and “Bodycare” categories on the MakeupAddiction forum. Furthermore, we aim to conduct sentiment analysis on comments associated with each post to gauge whether the sentiment expressed is positive or negative towards these brand products. The goal is to provide actionable insights for the beauty industry, helping brands understand consumer sentiments and popular products in these categories, ultimately improving their marketing strategies and product development to meet customer demands.</p>
+    <li>Technical Proposal:</li>
+<p>In our extensive analysis of the MakeupAddiction subreddit, covering data from 2021 to 2023, we focused on gathering and processing key information such as subreddit names, post texts, titles, and comment counts. We meticulously cleaned and organized this data, linking comments to respective posts and categorizing them into "Skincare," "Makeup," and "Bodycare" using dummy variables. Employing Natural Language Processing (NLP) techniques, we extracted brand mentions from the content, identifying the frequency of these mentions across the community discussions. Additionally, we conducted sentiment analysis on the comments to assign sentiment scores, thus enriching our dataset with both quantitative and qualitative insights. </p>
+</ul>
+
+<h4><b>Evolving Language of Beauty: Diachronic Linguistic Analysis of ‘MakeupAddiction’ Subreddit (2021-2023)</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Language serves as more than a mere means of communication in the ever-evolving realm of beauty and cosmetics; it also serves as an indicator of consumer preferences, cultural changes, and emerging trends. The aim of this study is to analyze the linguistic terrain of the “MakeupAddiction” subreddit, tracing the development of colloquialisms and terminology utilized in the cosmetics community between 2021 and 2023. By looking at the rise, fall, and possible demise of certain words, we hope to create a linguistic mirror that shows how the cosmetics industry has changed in a broader sense. These observations can assist brands, influencers, and enthusiasts in comprehending the changing preferences of the community and remaining informed about the most recent terminology.</p>
+    <li>Technical Proposal:</li>
+    <p>Preserve and cleanse all pertinent textual information contained in the “MakeupAddiction” subreddit remarks and posts within the allotted time period. Incorporate NLP methodologies, such as tokenization and lemmatization, to facilitate text normalization. Use TF-IDF to do an industry-specific diachronic linguistic analysis to find and connect important changes in terminology that have happened over time. Deliver conclusions using dynamic visual representations and produce a report that interprets linguistic shifts in order to provide industry stakeholders with strategic insights. Develop a predictive model for predicting forthcoming trends in language pertaining to cosmetics and use in the following machine learning part.</p>
+</ul>
+								<h3>Machine Learning</h3>
+								<h4><b>Predicting Post Popularity on ‘MakeupAddiction’ for Enhanced Engagement Strategies</b></h4>
+<ul>
+    <li>Business Goals:</li>
+<p>Maximize the effectiveness of content shared on 'MakeupAddiction' by developing a predictive model that accurately forecasts the popularity of posts, including their score and the number of comments. This initiative will empower creators and brands to engage more strategically with their target audience, ultimately driving increased reach and impact within the MakeupAddiction subreddit. Furthermore, by conducting a thorough analysis of the key factors influencing post popularity, we aim to provide valuable insights to content creators, highlighting essential strategies for achieving high scores in the subreddit.</p>
+	<li>Technical Proposal:</li>
+<p>Our goal is to develop a predictive model to increase content engagement in the “MakeupAddiction” subreddit. Our approach involves comprehensive feature engineering, including post length, makeup topic, post time, and skin care and makeup classification variables. We will employ gradient boosting regressors and other regression models to accurately predict post popularity, using post score and post comment count as the main indicators. After rigorous training and validation comparing various model metrics, we will deploy the model as a practical tool for content creators and brands, allowing them to optimize content strategies by aligning with data-driven predictions.</p>
+</ul>
+
+<h4><b>Elevating User Experience: Enhanced Tag Classification for Personalized Content Discovery in ‘MakeupAddiction’ Subreddit</b></h4>
+<ul>
+    <li>Business Goals:</li>
+    <p>Navigating the enormous ocean of social media content, users frequently encounter difficulties in promptly locating content that corresponds to their interests. Our aim is to enhance the user experience on the “MakeupAddiction” subreddit through the development of a sophisticated system for classifying posts. Our objective is to enhance community engagement, optimize content discovery, and achieve this by accurately classifying posts according to their content, user interaction, and other relevant metadata. It is anticipated that this endeavor will result in increased user contentment, longer platform sessions, and improved user retention through the presentation of a more structured and personalized content environment.</p>
+    <li>Technical Proposal:</li>
+<p>It is indeed feasible to construct a supervised machine learning model that excels in accurately classifying posts by leveraging a combination of textual and metadata features, including post titles, content, user interaction data, and other pertinent subreddit metadata. To effectively process textual information, the model will undergo training using natural language processing (NLP) techniques, such as TF-IDF and word embeddings. Subsequently, we will assess its performance using standardized classification metrics, including accuracy, F1 score, and confusion matrix analysis. Our model arsenal will encompass Random Forest, Naive Bayes, and Logistic Regression models, allowing for a comprehensive comparison to select the most suitable classifier. </p>
+</ul>
+
+<h4><b>Fostering Engagement and Understanding: Analyzing the Relationship Between Comment Controversiality and User Interaction in the ‘MakeupAddiction’ Subreddit (2021-2023)</b></h4>
+<ul>
+    <li>Business Goals:</li>
+<p>The business goal here is to improve user engagement and content understanding on a platform (Reddit) by analyzing the link between comment controversiality and engagement. This involves assessing the impact of controversial comments on views and interactions, identifying hot topics within controversial discussions, and predicting engagement levels in forum posts. The ultimate aim is to enhance user experience, boost engagement, and provide valuable insights for content management and platform growth.</p>
+	<li>Technical Proposal:</li>
+<p>We aim to construct a sophisticated classification prediction model for comment bodies, specifically geared towards identifying controversial comments. To achieve this goal, we will harness the power of both the Naive Bayes and Support Vector Machine (SVM) algorithms, utilizing independent variables derived from the TF-IDF (Term Frequency-Inverse Document Frequency) representations of the comments. Our approach delves into extensive model comparison, parameter tuning, and feature engineering, with the aim of unearthing the most formidable model for tackling the intricate task of comment controversy classification. Through this technical journey, we aspire not only to optimize model performance but also to provide a valuable tool for enhancing content moderation and community engagement within our platform.</p>
+</ul>
+
+							</section>
+
+					</div>
+				<!-- Footer -->
+				<footer id="footer">
+					<section>
+						<h2>Contact US</h2>
+						<dl class="alt">
+							<dt>Address</dt>
+							<dd>3520 Prospect St NW &bull;  Washington, DC 20007 &bull; USA</dd>
+							<dt>Email</dt>
+							<dd>yy702@georgetown.edu</dd>
+							<dd>zc233@georgetown.edu</dd>
+							<dd>nc807@georgetown.edu</dd>
+							<dd>sf1048@georgetown.edu</dd>
+						</dl>
+						<ul class="icons">
+							<li><a href="https://github.com/gu-dsan6000/fall-2023-reddit-project-team-33" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
+						</ul>
+					</section>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Feedback Discussion</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1>Feedback Discussion</h1>
+					</header>
+				<!-- Nav -->
+				<nav id="nav">
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="#plan" class="active">Project Plans</a></li>
+						<li><a href="#EDA" class="active">EDA Work</a></li>
+						<li><a href="#NLP" class="active">NLP Work</a></li>
+						<li><a href="#ML" class="active">ML Work</a></li>
+                        <li><a href="#Web" class="active">Website/Results</a></li>
+
+					</ul>
+				</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Content -->
+							<section id="content" class="main">
+
+								<!-- Text -->
+								<section id="plan" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>Project Plans</b></h2>
+									</div>
+                                    <p><b>1. Peer Review Comment:</b></p>
+                                    <p>The peer review has indicated that there is a shortfall in providing a clear outline of the research questions.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>In response to peer review feedback, we have refined the presentation of our research by strategically reorganizing our content into three distinct categories: exploratory analysis, NLP, and machine learning, comprising four, four, and three topics respectively. This meticulous classification sharpens the focus on our research objectives and streamlines navigation. These categories are now prominently featured in the "11 Data Science Topics" section of our "Introduction" website, ensuring straightforward access for all readers.</p>
+
+
+                                    <hr />
+								</section>
+                                <section id="EDA" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>EDA Work</b></h2>
+									</div>
+                                    <p><b>1. Instructor Comment:</b></p>
+                                    <p>The instructor review stressed that using only 10,000 rows does not constitute big data. </p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>Acknowledging the critical role of big data in our analysis, we have significantly scaled our dataset to fully embrace the big data paradigm. We transitioned from a limited sample to utilizing the complete set of data available in the MakeupAddiction subreddit, which includes over 95,000 submissions and over 1,030,000 comments. This enhancement has led us to re-evaluate and enrich our EDA, NLP, and ML tasks, ensuring they are representative of true big data standards and provide more robust insights.</p>
+                                    
+                                    <p><b>2. Instructor Comment:</b></p>
+                                    <p>The instructor review highlighted a lack of reporting on the null hypothesis for statistical tests conducted.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>Heeding the feedback, we have meticulously reviewed our statistical processes, involving Independent Samples t-tests and Mann-Whitney U tests, which evaluate differences in submission scores and comment counts between users under 18 and over 18, as well as between submissions with and without media. We have ensured detailed examination and clear reporting on the null hypotheses associated with these tests. For a detailed account, readers are directed to the updated analysis on our "EDA" page.</p>
+
+                                    <p><b>3. Instructor Comment:</b></p>
+                                    <p>The instructor review emphasizes the need for a thorough spell check in the documentation.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>In response, we have diligently reviewed and rectified any spelling errors throughout our documentation to ensure clarity and professionalism in our presentation.</p>
+
+                                    <p><b>4. Peer Review Comment:</b></p>
+                                    <p>The peer review emphasizes the need for a thorough spell check in the documentation.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>Following this observation, we investigated various text-related columns in our submissions dataset. We noted that while the title field is mandatory for submissions while the selftext field is optional. Our analysis now includes both title and selftext lengths, and the findings are comprehensively displayed on our "NLP" Web Page, "Basic Data Text Analysis." This adjustment provides a more accurate representation of text length distribution in our dataset.</p>
+
+                                    <hr />
+								</section>
+                                <section id="NLP" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>NLP Work</b></h2>
+									</div>
+                                    <p><b>1. Instructor Comment:</b></p>
+                                    <p>The review pointed out that the color scheme used for representing creator score/posting karma was confusing.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>Acknowledging this feedback, we have updated the color scheme to a more intuitive three-color palette, distinctly representing the years 2021, 2022, and 2023. This change enhances the clarity and interpretability of our visualizations related to creator scores and posting karma.</p>
+
+
+                                    <p><b>2. Instructor Comment:</b></p>
+                                    <p>The review indicates that the ratio of writing to graphical content is disproportionately high.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>To address this, we have succinctly rephrased and condensed our textual content, presenting key analytical findings and conclusions in bullet points rather than extended paragraphs. This revision ensures a more balanced ratio of writing to graphical elements in our documentation.</p>
+
+                                    <p><b>3. Instructor Comment:</b></p>
+                                    <p>The review indicates that the ratio of writing to graphical content is disproportionately high.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>To address this, we have succinctly rephrased and condensed our textual content, presenting key analytical findings and conclusions in bullet points rather than extended paragraphs. This revision ensures a more balanced ratio of writing to graphical elements in our documentation.</p>
+
+                                    <p><b>4. Instructor Comment:</b></p>
+                                    <p>The feedback highlights that sentiments in our charts were not sorted by label.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>In response, we've implemented bar charts to represent the proportions of various emotion categories, now sorted by the proportion of negative emotions. This arrangement, from highest to lowest in terms of negative sentiment, offers a clearer view of sentiment patterns across different tags in our analysis.</p>
+
+                                    <p><b>5. Instructor Comment:</b></p>
+                                    <p>The review suggests a thorough review of the decimal points used throughout our graphs, charts, and tables for consistency.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>To ensure clarity and uniformity, we have standardized the rounding of all numerical figures across our visual representations. Whether it's in the hover details of our figures or within the displayed data, all numbers are now consistently rounded to two decimal places or formatted for optimal readability.</p>
+
+                                    <p><b>6. Instructor Comment:</b></p>
+                                    <p>The review points out that while Pandas was used for generating top makeup product charts, the NLP aspect of the project requires handling big data.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>In response, we re-evaluated all our NLP tasks with a focus on big data, analyzing over 95,000 rows of full submissions. We utilized PySpark for data filtering, grouping, text cleaning, and sentiment analysis to efficiently manage the large dataset. Pandas was then exclusively used for creating the final visual plots, ensuring that our NLP methodologies align with the demands of big data analysis.</p>
+
+                                    <p><b>7. Instructor Comment:</b></p>
+                                    <p>The review notes that the final count of skincare brands appeared to be in the single digits, suggesting that the use of small datasets for initial analysis might have been a contributing factor.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>To address this concern, we expanded our data aggregation scope to include products and brands from 2021 to 2023. It is important to note that not every product or brand is consistently mentioned each year, and some years might lack a complete set of top 10 products or brands. This analysis revealed a substantial variation in the frequency and intensity of discussions surrounding different skincare brands. Upon thorough examination, we found that the actual count of skincare brands discussed was in the hundreds, significantly higher than initially observed.</p>
+
+                                    <p><b>8. Instructor Comment:</b></p>
+                                    <p>The review highlighted issues with the mobile sentiment analysis charts, where words flipped and appeared or disappeared sequentially, affecting readability.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>To rectify this, we've modified the dynamic image settings to ensure complete visibility of all elements, regardless of the paused state. This adjustment is aimed at providing a clear and continuous display of the dynamic shifts in keywords over the three-year span, enhancing the interpretability and coherence of our sentiment analysis visualization on mobile devices.</p>
+                                    <hr />
+								</section>
+                                <section id="ML" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>ML Work</b></h2>
+									</div>
+                                    <p><b>1. Instructor Comment:</b></p>
+                                    <p>The review commended the analysis of the number of comments on a submission.                                    </p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>Encouraged by this positive feedback, we expanded our analytical approach to include prediction of submission scores. We incorporated a diverse array of models for this purpose, such as Linear Regression, Generalized Linear Regression, and Elastic Net Regression, to ensure a comprehensive and robust predictive analysis.</p>
+                                    
+                                    <p><b>2. Instructor Comment:</b></p>
+                                    <p>The review pointed out a misspelling in the page title 'Summary' and noted that the introduction text was overly lengthy.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>We have addressed the misspelling in the page title and streamlined the introduction and conclusion sections. Our revisions include condensing the text into bullet points for a clearer presentation of our analytical results and conclusions, replacing lengthy paragraphs. Furthermore, we made enhancements to our HTML website layout to improve overall readability and visibility.</p>
+                                    
+
+                                    <hr />
+								</section>
+                                <section id="Web" class="main">
+									<div style="display: flex; align-items: center;">
+										<h2><b>Website/Results</b></h2>
+									</div>
+                                    <p><b>1. Peer Review Comment:</b></p>
+                                    <p>The review noted that the updated website (hosted on github.io) lacked the necessary proposal details.</p>
+                                    <p><b>Response and Action Taken:</b></p>
+                                    <p>We have rectified this issue. The website now comprehensively includes introductory information, analytical results, business analysis, and complete access to all the code, ensuring that all essential components of the proposal are readily available and accessible to visitors.</p>
+                                    
+
+								</section>
+<hr />
+
+
+
+					</div>
+				<!-- Footer -->
+				<footer id="footer">
+					<section>
+						<h2>Contact US</h2>
+						<dl class="alt">
+							<dt>Address</dt>
+							<dd>3520 Prospect St NW &bull;  Washington, DC 20007 &bull; USA</dd>
+							<dt>Email</dt>
+							<dd>yy702@georgetown.edu</dd>
+							<dd>zc233@georgetown.edu</dd>
+							<dd>nc807@georgetown.edu</dd>
+							<dd>sf1048@georgetown.edu</dd>
+						</dl>
+						<ul class="icons">
+							<li><a href="https://github.com/gu-dsan6000/fall-2023-reddit-project-team-33" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
+						</ul>
+					</section>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
